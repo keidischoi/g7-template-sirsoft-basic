@@ -3,7 +3,7 @@
   "type": "basic",
   "name": "Div",
   "if": "{{product.data?.sales_status === 'on_sale'}}",
-  "props": { "className": "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5" },
+  "props": { "className": "bg-transparent dark:bg-transparent border border-gray-200 dark:border-gray-700 rounded-lg p-5" },
   "children": [
     {
       "comment": "=== 배송 불가 사전 경고 (B8 — 선택 배송국가로 배송 불가) ===",
