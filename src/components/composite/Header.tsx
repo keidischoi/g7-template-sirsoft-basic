@@ -373,11 +373,31 @@ const Header: React.FC<HeaderProps> = ({
     );
   };
 
+  // 경로별 활성 색 (같은 경로는 고정, 페이지마다 다른 팔레트 색)
+  const NAV_ACTIVE_PALETTE = [
+    'bg-blue-600 text-white dark:bg-blue-500 dark:text-white',
+    'bg-orange-500 text-white dark:bg-orange-400 dark:text-gray-900',
+    'bg-emerald-600 text-white dark:bg-emerald-500 dark:text-white',
+    'bg-violet-600 text-white dark:bg-violet-500 dark:text-white',
+    'bg-rose-600 text-white dark:bg-rose-500 dark:text-white',
+    'bg-cyan-600 text-white dark:bg-cyan-500 dark:text-white',
+    'bg-amber-500 text-gray-900 dark:bg-amber-400 dark:text-gray-900',
+    'bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white',
+  ] as const;
+
+  const activeColorForPath = (path: string): string => {
+    let hash = 0;
+    for (let i = 0; i < path.length; i += 1) {
+      hash = (hash * 31 + path.charCodeAt(i)) >>> 0;
+    }
+    return NAV_ACTIVE_PALETTE[hash % NAV_ACTIVE_PALETTE.length];
+  };
+
   // 네비게이션 버튼 스타일
   const getNavButtonClass = (isActive: boolean): string => {
     const baseClass = 'px-3 py-2 text-sm font-medium whitespace-nowrap cursor-pointer rounded-lg transition-colors';
     if (isActive) {
-      return `${baseClass} bg-gray-900 text-white dark:bg-white dark:text-gray-900`;
+      return `${baseClass} ${activeColorForPath(currentPath)}`;
     }
     return `${baseClass} text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800`;
   };
