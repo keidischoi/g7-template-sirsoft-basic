@@ -6,10 +6,15 @@
     "meta": {
         "seo": {
             "enabled": true,
-            "data_sources": ["popularPosts"],
+            "data_sources": [
+                "popularPosts"
+            ],
             "page_type": "boards",
             "extensions": [
-                { "type": "module", "id": "sirsoft-board" }
+                {
+                    "type": "module",
+                    "id": "sirsoft-board"
+                }
             ],
             "vars": {
                 "site_name": "$core_settings:general.site_name"
@@ -44,6 +49,32 @@
                     }
                 }
             }
+        },
+        {
+            "id": "ad_board_popular_top",
+            "label_key": "Ad board.popular.top",
+            "type": "api",
+            "endpoint": "/api/modules/custom-ad_slots/placements",
+            "method": "GET",
+            "auto_fetch": true,
+            "auth_mode": "optional",
+            "loading_strategy": "progressive",
+            "params": {
+                "slot": "board.popular.top"
+            },
+            "fallback": {
+                "data": []
+            },
+            "errorHandling": {
+                "404": {
+                    "handler": "suppress",
+                    "comment": "모듈 미설치 시 조용히 무시"
+                },
+                "500": {
+                    "handler": "suppress"
+                }
+            },
+            "comment": "custom-ad_slots: always attempt fetch; 404/500 suppressed when module absent"
         }
     ],
     "slots": {
@@ -55,6 +86,24 @@
                     "className": "py-8"
                 },
                 "children": [
+                    {
+                        "comment": "Ad slot: board.popular.top (인기글 상단)",
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{((ad_board_popular_top.data ?? ad_board_popular_top ?? []).length > 0)}}",
+                        "props": {
+                            "className": "mb-6 flex flex-col gap-3"
+                        },
+                        "iteration": {
+                            "source": "{{ad_board_popular_top.data ?? ad_board_popular_top ?? []}}",
+                            "item_var": "ad"
+                        },
+                        "children": [
+                            {
+                                "partial": "partials/ads/_banner_list.json"
+                            }
+                        ]
+                    },
                     {
                         "type": "basic",
                         "name": "Div",
