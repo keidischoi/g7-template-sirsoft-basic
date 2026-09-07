@@ -1,7 +1,7 @@
 {
   "meta": {
     "is_partial": true,
-    "description": "custom-ad_slots 배너 아이템(리스트용). 부모가 data_sources를 로드하고 iteration(item_var=ad)로 이 partial을 호출한다. self-fetch 없음."
+    "description": "custom-ad_slots 배너 아이템(리스트용). desktop/mobile/legacy image_url 병행. 부모가 data_sources를 로드하고 iteration(item_var=ad)로 호출. self-fetch 없음."
   },
   "type": "basic",
   "name": "Div",
@@ -10,10 +10,10 @@
   },
   "children": [
     {
-      "comment": "static: 이미지 배너 (link_url 있으면 A로 감쌈)",
+      "comment": "static: 이미지 배너 (link_url 있으면 A로 감쌈) — desktop/mobile/legacy",
       "type": "basic",
       "name": "A",
-      "if": "{{(ad.type ?? 'static') === 'static' && ad.image_url && ad.link_url}}",
+      "if": "{{(ad.type ?? 'static') === 'static' && (ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url ?? ad.image_mobile ?? ad.image_url_mobile) && ad.link_url}}",
       "props": {
         "href": "{{ad.link_url}}",
         "target": "_blank",
@@ -26,9 +26,18 @@
           "type": "basic",
           "name": "Img",
           "props": {
-            "src": "{{ad.image_url}}",
+            "src": "{{ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url}}",
             "alt": "{{ad.title ?? 'ad'}}",
-            "className": "w-full h-auto object-cover rounded-lg"
+            "className": "hidden md:block w-full h-auto object-cover rounded-lg"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "Img",
+          "props": {
+            "src": "{{ad.image_mobile ?? ad.image_url_mobile ?? ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url}}",
+            "alt": "{{ad.title ?? 'ad'}}",
+            "className": "block md:hidden w-full h-auto object-cover rounded-lg"
           }
         }
       ]
@@ -36,19 +45,37 @@
     {
       "comment": "static: 이미지만 (링크 없음)",
       "type": "basic",
-      "name": "Img",
-      "if": "{{(ad.type ?? 'static') === 'static' && ad.image_url && !ad.link_url}}",
+      "name": "Div",
+      "if": "{{(ad.type ?? 'static') === 'static' && (ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url ?? ad.image_mobile ?? ad.image_url_mobile) && !ad.link_url}}",
       "props": {
-        "src": "{{ad.image_url}}",
-        "alt": "{{ad.title ?? 'ad'}}",
-        "className": "w-full h-auto object-cover rounded-lg"
-      }
+        "className": "w-full"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Img",
+          "props": {
+            "src": "{{ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url}}",
+            "alt": "{{ad.title ?? 'ad'}}",
+            "className": "hidden md:block w-full h-auto object-cover rounded-lg"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "Img",
+          "props": {
+            "src": "{{ad.image_mobile ?? ad.image_url_mobile ?? ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url}}",
+            "alt": "{{ad.title ?? 'ad'}}",
+            "className": "block md:hidden w-full h-auto object-cover rounded-lg"
+          }
+        }
+      ]
     },
     {
       "comment": "static: 이미지 없이 제목+링크",
       "type": "basic",
       "name": "A",
-      "if": "{{(ad.type ?? 'static') === 'static' && !ad.image_url && ad.link_url}}",
+      "if": "{{(ad.type ?? 'static') === 'static' && !(ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url ?? ad.image_mobile ?? ad.image_url_mobile) && ad.link_url}}",
       "props": {
         "href": "{{ad.link_url}}",
         "target": "_blank",
@@ -67,7 +94,7 @@
       "comment": "static: 이미지·링크 없이 제목만",
       "type": "basic",
       "name": "Div",
-      "if": "{{(ad.type ?? 'static') === 'static' && !ad.image_url && !ad.link_url && ad.title}}",
+      "if": "{{(ad.type ?? 'static') === 'static' && !(ad.image_desktop ?? ad.image_url_desktop ?? ad.image_url ?? ad.image_mobile ?? ad.image_url_mobile) && !ad.link_url && ad.title}}",
       "props": {
         "className": "w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-200"
       },
