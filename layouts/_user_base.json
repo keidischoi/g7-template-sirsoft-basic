@@ -1088,14 +1088,24 @@
                                     ]
                                 },
                                 {
-                                    "comment": "통화 선택 — 이커머스 모듈 주입 슬롯(헤더에서 이동). 모듈 미설치 시 빈 슬롯 → 렌더 영향 0. 헤더는 가로 flex 였으나 드로어는 세로 블록이므로 block 으로 둔다(flex items-center 면 주입 루트가 콘텐츠 폭으로 줄어 펼친 목록이 좁아짐). 주입 루트가 portable 에서 스스로 w-full 을 갖는다.",
+                                    "comment": "통화 선택 — 쇼핑·마이페이지에서만 노출. 이커머스 모듈 주입 슬롯. shopBase 가 있으면 그 prefix, 없으면 products/cart/checkout/category.",
                                     "id": "mobile_drawer_currency_wrap",
-                                    "type": "composite",
-                                    "name": "SlotContainer",
+                                    "type": "basic",
+                                    "name": "Div",
+                                    "if": "{{(((_global.shopBase && _global.shopBase !== '/') ? (location.pathname === _global.shopBase || location.pathname.startsWith(_global.shopBase + '/')) : (location.pathname.startsWith('/products') || location.pathname.startsWith('/cart') || location.pathname.startsWith('/checkout') || location.pathname.startsWith('/category'))) || location.pathname === '/mypage' || location.pathname.startsWith('/mypage/'))}}",
                                     "props": {
-                                        "slotId": "header_currency",
                                         "className": "block"
-                                    }
+                                    },
+                                    "children": [
+                                        {
+                                            "type": "composite",
+                                            "name": "SlotContainer",
+                                            "props": {
+                                                "slotId": "header_currency",
+                                                "className": "block"
+                                            }
+                                        }
+                                    ]
                                 }
                             ]
                         },

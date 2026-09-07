@@ -278,13 +278,20 @@ const Header: React.FC<HeaderProps> = ({
     return currentPath === path || currentPath.startsWith(path + '/');
   };
 
-  // 쇼핑 관련 경로 체크 (products, cart, checkout, category 등)
+  // 쇼핑 관련 경로 체크 (nav 하이라이트 + 통화 셀렉터 노출)
   const isShopActive = (): boolean => {
     const base = shopBase === '/' ? '' : shopBase;
-    return currentPath.startsWith(`${base}/products`) ||
-           currentPath.startsWith(`${base}/cart`) ||
-           currentPath.startsWith(`${base}/checkout`) ||
-           currentPath.startsWith(`${base}/category`);
+    if (base) {
+      // /shop 및 /shop/* 전체 (상품·카트·결제·카테고리 등)
+      return currentPath === base || currentPath.startsWith(`${base}/`);
+    }
+    // no_route: 커머스 경로가 루트에 붙는 경우
+    return (
+      currentPath.startsWith('/products') ||
+      currentPath.startsWith('/cart') ||
+      currentPath.startsWith('/checkout') ||
+      currentPath.startsWith('/category')
+    );
   };
 
   // 네비게이션 버튼 스타일
@@ -497,11 +504,12 @@ const Header: React.FC<HeaderProps> = ({
             )}
 
 
-            {/* 통화 선택 — 이커머스 모듈이 'header_currency' 슬롯에 주입(layout_extensions).
-                헤더는 슬롯 이름만 알고 통화/모듈을 모름. 모듈 비활성 시 빈 슬롯 → 미렌더(인프라 자동 게이트).
-                id 지정 필수 — 같은 슬롯이 모바일 헤더 SlotContainer 와 동시 렌더되므로 주입 컴포넌트
-                root id 가 컨테이너별로 스코프되도록(SlotContainer 가 id 로 자식 root id 를 고유화) 한다. */}
-            <SlotContainer slotId="header_currency" id="header_currency_slot_desktop" className="flex items-center" />
+            {/* 통화 선택 — 쇼핑·마이페이지에서만 노출.
+                이커머스 모듈이 'header_currency' 슬롯에 주입(layout_extensions).
+                헤더는 슬롯 이름만 알고 통화/모듈을 모름. 모듈 비활성 시 빈 슬롯 → 미렌더. */}
+            {(isShopActive() || currentPath === '/mypage' || currentPath.startsWith('/mypage/')) && (
+              <SlotContainer slotId="header_currency" id="header_currency_slot_desktop" className="flex items-center" />
+            )}
 
             {/* 사용자 메뉴 */}
             {user?.uuid ? (
