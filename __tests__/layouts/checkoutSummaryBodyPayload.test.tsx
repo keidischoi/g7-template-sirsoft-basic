@@ -63,7 +63,25 @@ function expectedLegacy(ctx: any): Record<string, any> {
   return {
     temp_order_id: checkoutData?.data?.temp_order_id,
     orderer: _computed?.ordererDefaults,
-    shipping: _local?.shipping,
+    shipping: _computed?.isDigitalOnlyCheckout
+      ? {
+          country_code: _local?.shipping?.country_code || 'KR',
+          recipient_name:
+            _local?.shipping?.recipient_name ||
+            _local?.orderer?.name ||
+            _global?.currentUser?.name ||
+            '디지털구매자',
+          recipient_phone:
+            _local?.shipping?.recipient_phone ||
+            _local?.orderer?.phone ||
+            _global?.currentUser?.phone ||
+            '01000000000',
+          zipcode: _local?.shipping?.zipcode || '00000',
+          address: _local?.shipping?.address || '디지털 상품 (배송 없음)',
+          address_detail: _local?.shipping?.address_detail || '-',
+          region: _local?.shipping?.region || '',
+        }
+      : _local?.shipping,
     payment_method: _computed?.selectedCorePaymentMethod,
     shipping_memo:
       _local?.shippingMemo === 'custom' ? _local?.shippingMemoCustom : _local?.shippingMemo,
@@ -77,7 +95,7 @@ function expectedLegacy(ctx: any): Record<string, any> {
           }
         : null,
     expected_total_amount: checkoutData?.data?.calculation?.summary?.final_amount ?? 0,
-    save_shipping_address: _local?.saveShippingAddress ?? false,
+    save_shipping_address: _computed?.isDigitalOnlyCheckout ? false : (_local?.saveShippingAddress ?? false),
     guest_lookup_password: _global?.currentUser?.uuid ? null : (_local?.guestLookupPassword ?? ''),
     guest_lookup_password_confirmation: _global?.currentUser?.uuid
       ? null
