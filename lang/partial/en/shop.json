@@ -248,7 +248,8 @@
     "filter_rating_3": "⭐⭐⭐ 3 stars",
     "filter_rating_2": "⭐⭐ 2 stars",
     "filter_rating_1": "⭐ 1 star",
-    "filter_reset": "Reset Filters"
+    "filter_reset": "Reset Filters",
+    "add_to_cart_failed": "Could not add the item to the cart. Check options, shipping country, or stock, then try again."
   },
   "cart": {
     "title": "Cart",

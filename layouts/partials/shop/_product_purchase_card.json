@@ -318,7 +318,7 @@
                 "method": "POST",
                 "body": {
                   "product_id": "{{product.data.id}}",
-                  "items": "{{(_local.selectedItems ?? []).map(item => ({ product_option_id: item.optionId, quantity: item.quantity }))}}"
+                  "items": "{{(_local.selectedItems ?? []).map(item => ({ product_option_id: Number(item.optionId), quantity: item.quantity }))}}"
                 }
               },
               "onSuccess": [
