@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "sirsoft-basic 사용자 템플릿 라우트 정의",
+  "description": "modified-basic 사용자 템플릿 라우트 정의",
   "routes": [
     {
       "_comment": "=== 홈 ===",
@@ -11,7 +11,6 @@
         "title": "$t:user.home.page_title"
       }
     },
-
     {
       "_comment": "=== 인증 ===",
       "path": "/login",
@@ -57,7 +56,6 @@
         "title": "$t:user.identity.challenge.title"
       }
     },
-
     {
       "_comment": "=== 게시판 ===",
       "path": "/boards",
@@ -107,7 +105,6 @@
         "title": "$t:user.board.edit_title"
       }
     },
-
     {
       "_comment": "=== 쇼핑몰 ===",
       "path": "/{{_global.modules?.['sirsoft-ecommerce']?.basic_info?.no_route ? '' : (_global.modules?.['sirsoft-ecommerce']?.basic_info?.route_path ?? 'shop')}}/products",
@@ -185,7 +182,6 @@
         "title": "$t:shop.reorder.title"
       }
     },
-
     {
       "_comment": "=== 마이페이지 ===",
       "path": "/mypage",
@@ -283,7 +279,6 @@
         "title": "$t:user.mypage.inquiries_title"
       }
     },
-
     {
       "_comment": "=== 사용자 프로필 ===",
       "path": "/users/:userId",
@@ -301,7 +296,6 @@
         "title": "$t:user.profile.posts_page_title"
       }
     },
-
     {
       "_comment": "=== 페이지 ===",
       "path": "/page/:slug",
@@ -311,7 +305,6 @@
         "title": "$t:user.page.page_title"
       }
     },
-
     {
       "_comment": "=== 검색 ===",
       "path": "/search",
@@ -321,7 +314,6 @@
         "title": "$t:user.search.page_title"
       }
     },
-
     {
       "_comment": "=== 에러 페이지 ===",
       "path": "/404",
