@@ -543,7 +543,8 @@
                     ]
                   },
                   {
-                    "comment": "배송지 정보",
+                    "comment": "배송지 정보 — 없거나 디지털 더미면 숨김",
+                    "if": "{{!!(orderData?.data?.shipping_address?.zipcode || orderData?.data?.shipping_address?.address || orderData?.data?.shipping_address?.address_line_1 || orderData?.data?.shipping_address?.intl_postal_code) && !(String(orderData?.data?.shipping_address?.zipcode ?? '') === '00000' && String(orderData?.data?.shipping_address?.address ?? '').includes('디지털'))}}",
                     "type": "basic",
                     "name": "Div",
                     "props": { "className": "py-4 border-b border-gray-200 dark:border-gray-700" },
