@@ -1141,7 +1141,7 @@
                                             "name": "Avatar",
                                             "props": {
                                                 "avatar": "{{_global.currentUser?.avatar}}",
-                                                "name": "{{_global.currentUser?.name ?? '?'}}",
+                                                "name": "{{(_global.currentUser?.nickname && String(_global.currentUser.nickname).trim()) || (_global.currentUser?.name ?? '?')}}",
                                                 "size": "md"
                                             }
                                         },
@@ -1158,7 +1158,7 @@
                                                     "props": {
                                                         "className": "font-medium text-gray-900 dark:text-white truncate"
                                                     },
-                                                    "text": "{{_global.currentUser?.name}}"
+                                                    "text": "{{(_global.currentUser?.nickname && String(_global.currentUser.nickname).trim()) || _global.currentUser?.name}}"
                                                 },
                                                 {
                                                     "type": "basic",
