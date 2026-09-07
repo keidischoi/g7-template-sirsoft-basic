@@ -269,22 +269,22 @@ const Footer: React.FC<FooterProps> = ({
 
       </Div>
 
-        {/* 마켓플레이스 고지 (저작권/파워드바이 대체) — 연한 회색 배경 */}
-        <Div className="bg-gray-100 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
+        {/* 마켓플레이스 고지 (저작권/파워드바이 대체) — 진한 회색 배경 */}
+        <Div className="bg-gray-200 dark:bg-gray-700 border-t border-gray-300 dark:border-gray-600">
           <Div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-left">
-            <P className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-              {`사이버몰 내 판매되는 상품 중에는 개별 판매자가 판매하는 마켓플레이스(오픈마켓) 상품이 포함되어 있습니다.`}
+            <P className="text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+              {`사이버몰 내 판매되는 디자인은 대부분 자체 제품이지만 상품 중에는 개별 판매자가 판매하는 마켓플레이스(오픈마켓) 상품이 포함되어 있을 수 있습니다.`}
             </P>
-            <P className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+            <P className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
               {`마켓플레이스(오픈마켓) 상품의 경우 ${siteName}는 통신판매중개자이며 통신판매의 당사자가 아닙니다.`}
             </P>
-            <P className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+            <P className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
               {`${siteName}는 마켓플레이스(오픈마켓) 상품, 거래정보 및 거래 등에 대하여 책임을 지지 않습니다.`}
             </P>
-            <P className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-              {`${siteName}는 소비자 보호와 안전거래를 위해 고객센터를 운영하고 있으며, 관련 분쟁이 발생할 경우 별도의 분쟁 처리절차에 의거 분쟁이 처리됩니다.`}
+            <P className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+              {`${siteName}는 소비자 보호와 안전거래를 위해 상담 서비스를 운영하고 있으며, 관련 분쟁이 발생할 경우 별도의 분쟁 처리절차에 의거 분쟁이 처리됩니다.`}
             </P>
-            <P className="mt-3 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+            <P className="mt-3 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
               {`Copyright © ${siteName}. ${currentYear} All Rights Reserved.`}
             </P>
           </Div>
