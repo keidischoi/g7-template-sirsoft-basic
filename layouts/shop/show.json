@@ -282,6 +282,18 @@
       "fallback": {
         "data": []
       }
+    },
+    {
+      "id": "ad_shop_detail_top",
+      "label_key": "Ad shop.detail.top",
+      "type": "api",
+      "endpoint": "/api/modules/custom-ad_slots/placements",
+      "method": "GET",
+      "auto_fetch": true,
+      "auth_mode": "optional",
+      "loading_strategy": "progressive",
+      "params": { "slot": "shop.detail.top" },
+      "fallback": { "data": [] }
     }
   ],
   "modals": [
@@ -364,6 +376,24 @@
                   "mergeQuery": true,
                   "query": {}
                 }
+              }
+            ]
+          },
+          {
+            "comment": "Ad slot: shop.detail.top (헤더/뒤로가기 다음)",
+            "type": "basic",
+            "name": "Div",
+            "if": "{{(ad_shop_detail_top.data ?? ad_shop_detail_top ?? []).length > 0}}",
+            "props": {
+              "className": "mb-4 flex flex-col gap-3"
+            },
+            "iteration": {
+              "source": "{{ad_shop_detail_top.data ?? ad_shop_detail_top ?? []}}",
+              "item_var": "ad"
+            },
+            "children": [
+              {
+                "partial": "partials/ads/_banner_list.json"
               }
             ]
           },

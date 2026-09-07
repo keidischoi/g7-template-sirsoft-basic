@@ -72,6 +72,42 @@
             "fallback": {
                 "data": []
             }
+        },
+        {
+            "id": "ad_home_top",
+            "label_key": "Ad home.top",
+            "type": "api",
+            "endpoint": "/api/modules/custom-ad_slots/placements",
+            "method": "GET",
+            "auto_fetch": true,
+            "auth_mode": "optional",
+            "loading_strategy": "progressive",
+            "params": { "slot": "home.top" },
+            "fallback": { "data": [] }
+        },
+        {
+            "id": "ad_home_mid",
+            "label_key": "Ad home.mid",
+            "type": "api",
+            "endpoint": "/api/modules/custom-ad_slots/placements",
+            "method": "GET",
+            "auto_fetch": true,
+            "auth_mode": "optional",
+            "loading_strategy": "progressive",
+            "params": { "slot": "home.mid" },
+            "fallback": { "data": [] }
+        },
+        {
+            "id": "ad_home_bottom",
+            "label_key": "Ad home.bottom",
+            "type": "api",
+            "endpoint": "/api/modules/custom-ad_slots/placements",
+            "method": "GET",
+            "auto_fetch": true,
+            "auth_mode": "optional",
+            "loading_strategy": "progressive",
+            "params": { "slot": "home.bottom" },
+            "fallback": { "data": [] }
         }
     ],
     "slots": {
@@ -95,6 +131,24 @@
                     }
                 },
                 "children": [
+                    {
+                        "comment": "=== Ad slot: home.top (첫 행 이전) ===",
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{(ad_home_top.data ?? ad_home_top ?? []).length > 0}}",
+                        "props": {
+                            "className": "mb-4 flex flex-col gap-3"
+                        },
+                        "iteration": {
+                            "source": "{{ad_home_top.data ?? ad_home_top ?? []}}",
+                            "item_var": "ad"
+                        },
+                        "children": [
+                            {
+                                "partial": "partials/ads/_banner_list.json"
+                            }
+                        ]
+                    },
                     {
                         "comment": "=== 1행: Welcome + 통계 카드 4개 (PC: 3컬럼, 모바일: 1컬럼) ===",
                         "type": "basic",
@@ -155,6 +209,24 @@
                                         "partial": "partials/home/_stat_card_boards.json"
                                     }
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        "comment": "=== Ad slot: home.mid (1행과 2행 사이) ===",
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{(ad_home_mid.data ?? ad_home_mid ?? []).length > 0}}",
+                        "props": {
+                            "className": "mb-4 flex flex-col gap-3"
+                        },
+                        "iteration": {
+                            "source": "{{ad_home_mid.data ?? ad_home_mid ?? []}}",
+                            "item_var": "ad"
+                        },
+                        "children": [
+                            {
+                                "partial": "partials/ads/_banner_list.json"
                             }
                         ]
                     },
@@ -226,6 +298,24 @@
                                         "partial": "partials/home/_board_summary.json"
                                     }
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        "comment": "=== Ad slot: home.bottom (마지막 행 이후) ===",
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{(ad_home_bottom.data ?? ad_home_bottom ?? []).length > 0}}",
+                        "props": {
+                            "className": "mt-4 flex flex-col gap-3"
+                        },
+                        "iteration": {
+                            "source": "{{ad_home_bottom.data ?? ad_home_bottom ?? []}}",
+                            "item_var": "ad"
+                        },
+                        "children": [
+                            {
+                                "partial": "partials/ads/_banner_list.json"
                             }
                         ]
                     }
