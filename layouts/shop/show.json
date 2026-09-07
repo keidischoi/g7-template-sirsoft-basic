@@ -298,17 +298,16 @@
       "fallback": {
         "data": []
       },
-      "if": "{{!!_global.modules?.['custom-ad_slots']}}",
       "errorHandling": {
         "404": {
           "handler": "suppress",
-          "comment": "모듈 미설치/라우트 없음 — 조용히 fallback"
+          "comment": "모듈 미설치 시 조용히 무시"
         },
         "500": {
           "handler": "suppress"
         }
       },
-      "comment": "custom-ad_slots optional: only fetch when module installed; 404/500 suppressed"
+      "comment": "custom-ad_slots: always attempt fetch; 404/500 suppressed when module absent"
     }
   ],
   "modals": [
@@ -398,7 +397,7 @@
             "comment": "Ad slot: shop.detail.top (헤더/뒤로가기 다음)",
             "type": "basic",
             "name": "Div",
-            "if": "{{!!_global.modules?.['custom-ad_slots'] && ((ad_shop_detail_top.data ?? ad_shop_detail_top ?? []).length > 0)}}",
+            "if": "{{((ad_shop_detail_top.data ?? ad_shop_detail_top ?? []).length > 0)}}",
             "props": {
               "className": "mb-4 flex flex-col gap-3"
             },
