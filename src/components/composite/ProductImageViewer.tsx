@@ -88,7 +88,7 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
   if (!images || images.length === 0) {
     return (
       <Div
-        className={`flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg aspect-square w-3/5 mx-auto ${className}`}
+        className={`flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg aspect-square ${className}`}
         id={id} {...editorAttrs}
       >
         <Div className="text-center text-gray-400 dark:text-gray-500">
@@ -104,17 +104,17 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
   return (
     <Div id={id} className={className} {...editorAttrs}>
       {/* 메인 이미지 */}
-      <Div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 aspect-square mb-3 w-3/5 mx-auto">
+      <Div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 aspect-square mb-3 flex items-center justify-center">
         <Button
           type="button"
-          className="w-full h-full cursor-zoom-in block"
+          className="max-w-[60%] max-h-[60%] w-auto h-auto cursor-zoom-in flex items-center justify-center p-0 bg-transparent border-0"
           onClick={() => openGallery(galleryImages, selectedIndex)}
           aria-label={t('shop.view_image')}
         >
           <Img
             src={getImageSrc(currentImage)}
             alt={currentImage.alt_text_current ?? ''}
-            className="w-full h-full object-contain"
+            className="max-w-full max-h-full w-auto h-auto object-contain"
           />
         </Button>
       </Div>
@@ -137,7 +137,7 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
               <Img
                 src={getImageSrc(img)}
                 alt={img.alt_text_current ?? ''}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </Button>
           ))}
