@@ -201,6 +201,75 @@ const CloseGlyph: React.FC<{ size?: number; className?: string }> = ({
   </svg>
 );
 
+
+/** 헤더 메뉴용 인라인 SVG 아이콘 (FA 폰트 의존 없음) */
+const MenuGlyph: React.FC<{
+  name: 'settings' | 'user' | 'orders' | 'heart' | 'logout' | 'chevron-down';
+  size?: number;
+  className?: string;
+}> = ({ name, size = 16, className = '' }) => {
+  const common = {
+    xmlns: 'http://www.w3.org/2000/svg',
+    width: size,
+    height: size,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 2,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    className,
+    'aria-hidden': true as const,
+    focusable: false as const,
+  };
+  switch (name) {
+    case 'settings':
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+      );
+    case 'user':
+      return (
+        <svg {...common}>
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      );
+    case 'orders':
+      return (
+        <svg {...common}>
+          <path d="M6 2h12l1 7H5L6 2z" />
+          <path d="M5 9v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9" />
+          <path d="M9 13h6" />
+        </svg>
+      );
+    case 'heart':
+      return (
+        <svg {...common}>
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+      );
+    case 'logout':
+      return (
+        <svg {...common}>
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      );
+    case 'chevron-down':
+      return (
+        <svg {...common}>
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
 const Header: React.FC<HeaderProps> = ({
   logo,
   siteName = '그누보드7',
@@ -529,7 +598,7 @@ const Header: React.FC<HeaderProps> = ({
                     size="sm"
                   />
                   <Span className="hidden sm:inline text-sm font-medium">{displayName}</Span>
-                  <Icon name="chevron-down" className="w-4 h-4" />
+                  <MenuGlyph name="chevron-down" size={14} className="shrink-0 opacity-70" />
                 </Button>
 
                 {/* 드롭다운 메뉴 */}
@@ -550,43 +619,49 @@ const Header: React.FC<HeaderProps> = ({
                       </Div>
                     </Div>
 
-                    {/* 메뉴 항목 */}
+                    {/* 메뉴 항목 — 항목별 SVG 아이콘 */}
                     <Div className="py-1">
-                      {/* 관리자 메뉴 (is_admin일 때만 표시) - 하이퍼링크로 전체 페이지 새로고침 */}
                       {user.is_admin && (
                         <>
                           <A
                             href="/admin"
-                            className="block w-full text-left px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer font-medium"
+                            className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer font-medium"
                           >
-                            <Icon name="settings" className="inline w-4 h-4 mr-2" />
+                            <MenuGlyph name="settings" className="shrink-0" />
                             {t('common.admin_menu')}
                           </A>
                           <Hr className="my-1 border-gray-200 dark:border-gray-700" />
                         </>
                       )}
-                      <Button onClick={() => { navigate('/mypage'); setShowUserMenu(false); }} className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                        <Icon name="user" className="inline w-4 h-4 mr-2" />
+                      <Button
+                        onClick={() => { navigate('/mypage'); setShowUserMenu(false); }}
+                        className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      >
+                        <MenuGlyph name="user" className="shrink-0" />
                         {t('common.mypage')}
                       </Button>
-                      <Button onClick={() => { navigate('/mypage/orders'); setShowUserMenu(false); }} className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                        <Icon name="shopping-bag" className="inline w-4 h-4 mr-2" />
+                      <Button
+                        onClick={() => { navigate('/mypage/orders'); setShowUserMenu(false); }}
+                        className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      >
+                        <MenuGlyph name="orders" className="shrink-0" />
                         {t('mypage.tabs.orders')}
                       </Button>
-                      <Button onClick={() => { navigate('/mypage/wishlist'); setShowUserMenu(false); }} className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                        <Icon name="heart" className="inline w-4 h-4 mr-2" />
+                      <Button
+                        onClick={() => { navigate('/mypage/wishlist'); setShowUserMenu(false); }}
+                        className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      >
+                        <MenuGlyph name="heart" className="shrink-0" />
                         {t('mypage.tabs.wishlist')}
                       </Button>
                     </Div>
 
-                    {/* 언어 선택은 헤더 독립 버튼으로 일원화(드롭다운에서 제거) — 비회원도 헤더에서 전환 가능 */}
-
                     <Hr className="my-1 border-gray-200 dark:border-gray-700" />
                     <Button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                     >
-                      <Icon name="log-out" className="inline w-4 h-4 mr-2" />
+                      <MenuGlyph name="logout" className="shrink-0" />
                       {t('auth.logout')}
                     </Button>
                   </Div>
