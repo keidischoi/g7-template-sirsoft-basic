@@ -106,7 +106,7 @@
                             "children": [
                                 { "tag": "h4", "content": "$t:footer.info" },
                                 { "tag": "a", "attrs": { "href": "/page/about" }, "content": "$t:footer.about" },
-                                { "tag": "a", "attrs": { "href": "/page/faq" }, "content": "$t:footer.faq" },
+                                { "tag": "a", "attrs": { "href": "/faq" }, "content": "$t:footer.faq" },
                                 { "tag": "a", "attrs": { "href": "/page/contact" }, "content": "$t:footer.contact" }
                             ]
                         },

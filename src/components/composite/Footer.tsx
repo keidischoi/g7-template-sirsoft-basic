@@ -143,7 +143,7 @@ const Footer: React.FC<FooterProps> = ({
       title: t('footer.info'),
       links: [
         { label: t('footer.about'), href: '/page/about' },
-        { label: t('footer.faq'), href: '/page/faq' },
+        { label: t('footer.faq'), href: '/faq' },
         { label: t('footer.contact'), href: '/page/contact' },
       ],
     },
