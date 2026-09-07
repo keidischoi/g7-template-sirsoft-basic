@@ -625,7 +625,7 @@ const Header: React.FC<HeaderProps> = ({
                         <>
                           <A
                             href="/admin"
-                            className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer font-medium"
+                            className="flex items-center justify-start gap-2.5 w-full text-left px-4 py-2.5 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer font-medium"
                           >
                             <MenuGlyph name="settings" className="shrink-0" />
                             {t('common.admin_menu')}
@@ -635,21 +635,21 @@ const Header: React.FC<HeaderProps> = ({
                       )}
                       <Button
                         onClick={() => { navigate('/mypage'); setShowUserMenu(false); }}
-                        className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                        className="!justify-start flex items-center justify-start gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                       >
                         <MenuGlyph name="user" className="shrink-0" />
                         {t('common.mypage')}
                       </Button>
                       <Button
                         onClick={() => { navigate('/mypage/orders'); setShowUserMenu(false); }}
-                        className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                        className="!justify-start flex items-center justify-start gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                       >
                         <MenuGlyph name="orders" className="shrink-0" />
                         {t('mypage.tabs.orders')}
                       </Button>
                       <Button
                         onClick={() => { navigate('/mypage/wishlist'); setShowUserMenu(false); }}
-                        className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                        className="!justify-start flex items-center justify-start gap-2.5 w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                       >
                         <MenuGlyph name="heart" className="shrink-0" />
                         {t('mypage.tabs.wishlist')}
@@ -659,7 +659,7 @@ const Header: React.FC<HeaderProps> = ({
                     <Hr className="my-1 border-gray-200 dark:border-gray-700" />
                     <Button
                       onClick={handleLogout}
-                      className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      className="!justify-start flex items-center justify-start gap-2.5 w-full text-left px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                     >
                       <MenuGlyph name="logout" className="shrink-0" />
                       {t('auth.logout')}
