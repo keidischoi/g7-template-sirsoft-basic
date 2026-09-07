@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Div } from '../basic/Div';
 import { Button } from '../basic/Button';
-import { Icon } from '../basic/Icon';
-import { IconName } from '../basic/IconTypes';
 import { Span } from '../basic/Span';
 import type { EditorAttrs } from '../../types';
 
@@ -92,6 +90,57 @@ const getInitialTheme = (): ThemeMode => {
   return 'auto';
 };
 
+
+/** FA 의존 없는 인라인 SVG (검색/장바구니/벨과 동일) */
+const SvgIcon: React.FC<{
+  kind: 'sun' | 'moon' | 'settings' | 'check';
+  className?: string;
+  size?: number;
+}> = ({ kind, className = '', size = 20 }) => {
+  const common = {
+    xmlns: 'http://www.w3.org/2000/svg',
+    width: size,
+    height: size,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 2,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    className,
+    'aria-hidden': true,
+    focusable: false as const,
+  };
+  if (kind === 'sun') {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      </svg>
+    );
+  }
+  if (kind === 'moon') {
+    return (
+      <svg {...common}>
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+    );
+  }
+  if (kind === 'settings') {
+    return (
+      <svg {...common}>
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <path d="M8 21h8M12 17v4" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common}>
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+  );
+};
+
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   onThemeChange,
   className = '',
@@ -158,9 +207,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   /**
    * 현재 표시할 아이콘 결정
    */
-  const getCurrentIcon = (): IconName => {
+  const getCurrentIcon = (): 'sun' | 'moon' => {
     const effectiveTheme = getEffectiveTheme(currentMode);
-    return effectiveTheme === 'dark' ? IconName.Moon : IconName.Sun;
+    return effectiveTheme === 'dark' ? 'moon' : 'sun';
   };
 
   return (
@@ -171,10 +220,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-600 dark:text-gray-400"
         aria-label="Toggle theme"
       >
-        <Icon
-          name={getCurrentIcon()}
-          className="w-5 h-5"
-        />
+        <SvgIcon kind={getCurrentIcon()} className="w-5 h-5" />
       </Button>
 
       {/* 테마 선택 드롭다운 */}
@@ -189,16 +235,10 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
                 ${currentMode === 'auto' ? 'bg-gray-50 dark:bg-gray-700' : ''}
               `}
             >
-              <Icon
-                name={IconName.Settings}
-                className="w-5 h-5 text-gray-600 dark:text-gray-400"
-              />
+              <SvgIcon kind="settings" className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               <Span className="flex-1 text-left text-gray-900 dark:text-white">{autoText}</Span>
               {currentMode === 'auto' && (
-                <Icon
-                  name={IconName.Check}
-                  className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto"
-                />
+                <SvgIcon kind="check" size={16} className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto" />
               )}
             </Button>
 
@@ -210,16 +250,10 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
                 ${currentMode === 'light' ? 'bg-gray-50 dark:bg-gray-700' : ''}
               `}
             >
-              <Icon
-                name={IconName.Sun}
-                className="w-5 h-5 text-gray-600 dark:text-gray-400"
-              />
+              <SvgIcon kind="sun" className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               <Span className="flex-1 text-left text-gray-900 dark:text-white">{lightText}</Span>
               {currentMode === 'light' && (
-                <Icon
-                  name={IconName.Check}
-                  className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto"
-                />
+                <SvgIcon kind="check" size={16} className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto" />
               )}
             </Button>
 
@@ -231,16 +265,10 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
                 ${currentMode === 'dark' ? 'bg-gray-50 dark:bg-gray-700' : ''}
               `}
             >
-              <Icon
-                name={IconName.Moon}
-                className="w-5 h-5 text-gray-600 dark:text-gray-400"
-              />
+              <SvgIcon kind="moon" className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               <Span className="flex-1 text-left text-gray-900 dark:text-white">{darkText}</Span>
               {currentMode === 'dark' && (
-                <Icon
-                  name={IconName.Check}
-                  className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto"
-                />
+                <SvgIcon kind="check" size={16} className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto" />
               )}
             </Button>
           </Div>
