@@ -60,24 +60,5 @@ export interface NotificationCenterProps {
     /** 레이아웃 편집기 주입 속성 (편집 모드 전용, 루트에 spread) */
     editorAttrs?: EditorAttrs;
 }
-/**
- * NotificationCenter 컴포넌트 (User)
- *
- * 알림 센터 - 알림 목록 표시, 무한스크롤, 읽음 추적.
- * sirsoft-admin_basic의 NotificationCenter와 동일 API/동작을 제공한다.
- *
- * @example
- * ```tsx
- * <NotificationCenter
- *   notifications={[
- *     { id: 1, title: '새 댓글', message: '게시물에 댓글이 달렸습니다', time: '5분 전' }
- *   ]}
- *   unreadCount={5}
- *   hasMore={true}
- *   titleText="알림"
- *   emptyText="알림이 없습니다."
- * />
- * ```
- */
 export declare const NotificationCenter: React.FC<NotificationCenterProps>;
 export default NotificationCenter;
