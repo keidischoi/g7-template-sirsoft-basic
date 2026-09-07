@@ -1,11 +1,11 @@
 {
-    "identifier": "sirsoft-basic",
-    "vendor": "sirsoft",
+    "identifier": "modified-basic",
+    "vendor": "modified",
     "name": {
         "ko": "Modified Basic",
         "en": "Modified Basic"
     },
-    "version": "1.1.5",
+    "version": "1.1.6",
     "license": "MIT",
     "description": {
         "ko": "그누보드7 Modified Basic 사용자 템플릿",
@@ -129,8 +129,8 @@
         "multi_language": true,
         "multi_currency": true
     },
-    "github_url": "https://github.com/gnuboard/g7-template-sirsoft-basic",
-    "github_changelog_url": "https://github.com/gnuboard/g7-template-sirsoft-basic/blob/main/CHANGELOG.md",
+    "github_url": "https://github.com/keidischoi/g7-template-sirsoft-basic",
+    "github_changelog_url": "https://github.com/keidischoi/g7-template-sirsoft-basic/blob/main/CHANGELOG.md",
     "externals": [
         {
             "id": "fontawesome",
