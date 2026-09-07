@@ -404,8 +404,7 @@
                     "type": "composite",
                     "name": "ProductImageViewer",
                     "props": {
-                      "images": "{{product.data?.images ?? []}}",
-                      "className": "mx-auto"
+                      "images": "{{product.data?.images ?? []}}"
                     }
                   }
                 ]

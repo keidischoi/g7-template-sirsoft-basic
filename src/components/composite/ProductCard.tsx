@@ -249,12 +249,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
       id={id} {...editorAttrs}
     >
       {/* 이미지 영역 */}
-      <Div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-        {/* 상품 이미지 — 원본 가로세로 비 유지, 영역 대비 60% 스케일 */}
+      <Div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700 w-3/5 mx-auto">
+        {/* 상품 이미지 — 썸네일 박스 자체를 60%로 축소, 이미지는 박스에 맞춤 */}
         <Img
           src={product.thumbnail_url}
           alt={displayName}
-          className="max-w-[60%] max-h-[60%] w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-200"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
           loading="lazy"
         />
 
