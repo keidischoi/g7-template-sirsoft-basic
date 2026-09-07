@@ -2471,7 +2471,7 @@
           ]
         },
         {
-          "comment": "Footer: businessInfo sample under siteName",
+          "comment": "=== Footer: businessInfo from sirsoft-ecommerce basic_info (needs frontend_schema expose) ===",
           "id": "footer",
           "type": "composite",
           "name": "Footer",
@@ -2485,13 +2485,13 @@
               "discord": "{{_global.settings?.social?.discord}}"
             },
             "businessInfo": {
-              "companyName": "[샘플] 주식회사 쓰리디스토어",
-              "representative": "홍길동",
-              "businessNumber": "000-00-00000",
-              "mailOrderNumber": "제0000-서울00-0000호",
-              "address": "서울특별시 중구 샘플로 1",
-              "phone": "02-0000-0000",
-              "email": "sample@3dstore.example"
+              "companyName": "{{_global.modules?.['sirsoft-ecommerce']?.basic_info?.company_name || ''}}",
+              "representative": "{{_global.modules?.['sirsoft-ecommerce']?.basic_info?.ceo_name || ''}}",
+              "businessNumber": "{{_global.modules?.['sirsoft-ecommerce']?.basic_info?.business_number || ''}}",
+              "mailOrderNumber": "{{_global.modules?.['sirsoft-ecommerce']?.basic_info?.mail_order_number || ''}}",
+              "address": "{{((_global.modules?.['sirsoft-ecommerce']?.basic_info?.base_address || '') + ' ' + (_global.modules?.['sirsoft-ecommerce']?.basic_info?.detail_address || '')).trim()}}",
+              "phone": "{{_global.modules?.['sirsoft-ecommerce']?.basic_info?.phone || ''}}",
+              "email": "{{_global.modules?.['sirsoft-ecommerce']?.basic_info?.email || ''}}"
             }
           }
         },
