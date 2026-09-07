@@ -3,6 +3,8 @@
     "is_partial": true,
     "description": "주문 상세 - 배송지 정보"
   },
+  "comment": "배송지 없음/디지털 더미(00000+디지털)면 섹션 전체 숨김",
+  "if": "{{!!(order.data.shipping_address?.zipcode || order.data.shipping_address?.address || order.data.shipping_address?.address_line_1 || order.data.shipping_address?.intl_postal_code) && !(String(order.data.shipping_address?.zipcode ?? '') === '00000' && String(order.data.shipping_address?.address ?? '').includes('디지털'))}}",
   "type": "basic",
   "name": "Div",
   "props": { "className": "bg-white dark:bg-gray-800 rounded-lg p-6" },
