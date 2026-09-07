@@ -59,7 +59,7 @@ function evalBody(ctx: Record<string, any>): Record<string, any> {
 
 /** 전환 이전 동작을 재현하는 기준 payload — 이 테스트가 진실의 기준(SSoT)이다. */
 function expectedLegacy(ctx: any): Record<string, any> {
-  const { checkoutData, _computed, _local, _global } = ctx;
+  const { checkoutData, _computed, _local, _global, paymentSettings } = ctx;
   return {
     temp_order_id: checkoutData?.data?.temp_order_id,
     orderer: _computed?.ordererDefaults,
@@ -89,9 +89,18 @@ function expectedLegacy(ctx: any): Record<string, any> {
     dbank:
       _computed?.selectedCorePaymentMethod === 'dbank'
         ? {
-            bank_code: _local?.selectedDbank?.bank_code,
-            account_number: _local?.selectedDbank?.account_number,
-            account_holder: _local?.selectedDbank?.account_holder,
+            bank_code:
+              _local?.selectedDbank?.bank_code ||
+              (paymentSettings?.data?.order_settings?.bank_accounts?.filter((b: any) => b.is_active) ??
+                [])[0]?.bank_code,
+            account_number:
+              _local?.selectedDbank?.account_number ||
+              (paymentSettings?.data?.order_settings?.bank_accounts?.filter((b: any) => b.is_active) ??
+                [])[0]?.account_number,
+            account_holder:
+              _local?.selectedDbank?.account_holder ||
+              (paymentSettings?.data?.order_settings?.bank_accounts?.filter((b: any) => b.is_active) ??
+                [])[0]?.account_holder,
           }
         : null,
     expected_total_amount: checkoutData?.data?.calculation?.summary?.final_amount ?? 0,
