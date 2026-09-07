@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "is_partial": true,
+    "description": "home.top Bunjang-style 히어로 광고 캐러셀. 부모가 ad_home_top을 로드하고 items로 전달 (self-fetch 없음)."
+  },
+  "type": "composite",
+  "name": "AdHeroCarousel",
+  "props": {
+    "items": "{{ad_home_top.data ?? ad_home_top ?? []}}"
+  }
+}
