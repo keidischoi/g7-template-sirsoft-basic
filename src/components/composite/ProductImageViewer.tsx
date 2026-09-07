@@ -88,7 +88,7 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
   if (!images || images.length === 0) {
     return (
       <Div
-        className={`flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg aspect-square ${className}`}
+        className={`flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg aspect-square w-3/5 mx-auto ${className}`}
         id={id} {...editorAttrs}
       >
         <Div className="text-center text-gray-400 dark:text-gray-500">
@@ -104,7 +104,7 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
   return (
     <Div id={id} className={className} {...editorAttrs}>
       {/* 메인 이미지 */}
-      <Div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 aspect-square mb-3">
+      <Div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 aspect-square mb-3 w-3/5 mx-auto">
         <Button
           type="button"
           className="w-full h-full cursor-zoom-in block"
@@ -126,7 +126,7 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
             <Button
               key={img.id}
               type="button"
-              className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-colors cursor-pointer ${
+              className={`flex-shrink-0 w-10 h-10 rounded-md overflow-hidden border-2 transition-colors cursor-pointer ${
                 index === selectedIndex
                   ? 'border-gray-900 dark:border-white'
                   : 'border-gray-200 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-400'

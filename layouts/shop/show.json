@@ -405,7 +405,7 @@
                     "name": "ProductImageViewer",
                     "props": {
                       "images": "{{product.data?.images ?? []}}",
-                      "className": "w-[60%] mx-auto"
+                      "className": "mx-auto"
                     }
                   }
                 ]

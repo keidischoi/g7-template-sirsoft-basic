@@ -249,7 +249,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       id={id} {...editorAttrs}
     >
       {/* 이미지 영역 */}
-      <Div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
+      <Div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700 w-3/5 mx-auto">
         {/* 상품 이미지 */}
         <Img
           src={product.thumbnail_url}
