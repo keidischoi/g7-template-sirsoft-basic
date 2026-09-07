@@ -248,11 +248,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       className={`block w-full text-left group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${className}`}
       id={id} {...editorAttrs}
     >
-      {/* 이미지 영역: 원본 정사각 대비 가로·세로 모두 60% */}
+      {/* 이미지 영역: 원본 대비 가로 60%, 비율 3:4 */}
       <Div className="flex w-full justify-center">
         <Div
           className="relative overflow-hidden bg-gray-100 dark:bg-gray-700"
-          style={{ width: '60%', aspectRatio: '1 / 1' }}
+          style={{ width: '60%', aspectRatio: '3 / 4' }}
         >
           <Img
             src={product.thumbnail_url}
