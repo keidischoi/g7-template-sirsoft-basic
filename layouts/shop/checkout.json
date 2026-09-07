@@ -225,7 +225,23 @@
             "method": "GET",
             "auto_fetch": true,
             "auth_mode": "optional",
-            "comment": "결제 설정 (활성 결제 수단, 은행 목록, 입금 계좌)"
+            "comment": "결제 설정 (활성 결제 수단, 은행 목록, 입금 계좌)",
+            "onSuccess": {
+                "comment": "무통장 활성 계좌가 있는데 미선택이면 첫 계좌 자동 선택 (첫 결제 클릭 검증 실패 방지)",
+                "handler": "conditions",
+                "conditions": [
+                    {
+                        "if": "{{!_local.selectedDbank && (paymentSettings.data?.order_settings?.bank_accounts?.filter(b => b.is_active) ?? []).length > 0}}",
+                        "then": {
+                            "handler": "setState",
+                            "params": {
+                                "target": "local",
+                                "selectedDbank": "{{(paymentSettings.data?.order_settings?.bank_accounts?.filter(b => b.is_active) ?? [])[0]}}"
+                            }
+                        }
+                    }
+                ]
+            }
         },
         {
             "id": "shippingSettings",
