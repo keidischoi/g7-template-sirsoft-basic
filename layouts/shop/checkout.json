@@ -88,7 +88,9 @@
         "_comment_payment": "선택된 결제수단 - _local에 없으면 첫 번째 활성 결제수단을 기본값으로 사용",
         "selectedPaymentMethod": "{{_local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(m => m.is_active)?.id ?? 'dbank'}}",
         "_comment_core_payment": "서버 전송용 코어 결제수단 - 플러그인 결제수단(toss_* 등)은 코어 PaymentMethodEnum 이 거부하므로, 선택 결제수단의 core_payment_method(모듈이 병합 시 보존)로 번역해 전송한다. 미선언(dbank/KG 등)은 raw id 그대로. IIFE/타 computed 참조를 피하려 선택 id 해석을 인라인 반복한다.",
-        "selectedCorePaymentMethod": "{{(paymentSettings.data?.order_settings?.payment_methods ?? []).find(m => m.id === (_local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'))?.core_payment_method ?? _local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'}}"
+        "selectedCorePaymentMethod": "{{(paymentSettings.data?.order_settings?.payment_methods ?? []).find(m => m.id === (_local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'))?.core_payment_method ?? _local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'}}",
+        "isDigitalOnlyCheckout": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? []).map(Number).includes(Number(item.product_id)))}}",
+        "_comment_digital": "디지털 전용 주문 — custom-digital_product digital-product-ids 의 product_id 집합과 checkout 아이템이 전부 일치할 때만 true. 로딩 전/혼합 장바구니는 false."
     },
     "data_sources": [
         {
@@ -145,6 +147,24 @@
                                 ]
                             }
                         }
+                    },
+                    {
+                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? []).map(Number).includes(Number(item.product_id))) && !_local.shipping?.zipcode}}",
+                        "then": {
+                            "handler": "setState",
+                            "params": {
+                                "target": "local",
+                                "shipping.country_code": "KR",
+                                "shipping.recipient_name": "{{_local.orderer?.name || _global.currentUser?.name || '디지털구매자'}}",
+                                "shipping.recipient_phone": "{{_local.orderer?.phone || _global.currentUser?.phone || '01000000000'}}",
+                                "shipping.zipcode": "00000",
+                                "shipping.address": "디지털 상품 (배송 없음)",
+                                "shipping.address_detail": "-",
+                                "shipping.region": "",
+                                "saveShippingAddress": false
+                            },
+                            "comment": "디지털 전용: 결제 검증용 더미 배송지 (이미 zipcode 있으면 덮지 않음)"
+                        }
                     }
                 ]
             },
@@ -164,10 +184,20 @@
             "auto_fetch": true,
             "auth_mode": "required",
             "comment": "사용자 저장 배송지 목록 (회원 전용). 비회원/토큰만료 시 401 코어 DEFAULT 핸들러가 navigate({{auth.loginPath}}) 를 발동해 'Failed to execute action: navigate' 가 보고됨 — suppress 로 조용히 무시",
-            "fallback": { "data": { "addresses": { "data": [] } } },
+            "fallback": {
+                "data": {
+                    "addresses": {
+                        "data": []
+                    }
+                }
+            },
             "errorHandling": {
-                "401": { "handler": "suppress" },
-                "403": { "handler": "suppress" }
+                "401": {
+                    "handler": "suppress"
+                },
+                "403": {
+                    "handler": "suppress"
+                }
             }
         },
         {
@@ -189,6 +219,54 @@
             "auto_fetch": true,
             "auth_mode": "optional",
             "comment": "배송 설정 (국내/해외 배송 가능 여부 등)"
+        },
+        {
+            "id": "digitalProductIds",
+            "label_key": "$t:editor.data_source.digitalProductIds",
+            "type": "api",
+            "endpoint": "/api/modules/custom-digital_product/digital-product-ids",
+            "method": "GET",
+            "auto_fetch": true,
+            "auth_mode": "optional",
+            "comment": "디지털 상품 ecommerce product_id 목록 (custom-digital_product). 전부 디지털이면 배송지 UI 숨김+오토필.",
+            "fallback": {
+                "success": true,
+                "data": {
+                    "product_ids": []
+                }
+            },
+            "errorHandling": {
+                "404": {
+                    "handler": "suppress"
+                },
+                "500": {
+                    "handler": "suppress"
+                }
+            },
+            "onSuccess": {
+                "comment": "플래그 로드 후 디지털 전용이면 배송지 오토필",
+                "handler": "conditions",
+                "conditions": [
+                    {
+                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? []).map(Number).includes(Number(item.product_id))) && !_local.shipping?.zipcode}}",
+                        "then": {
+                            "handler": "setState",
+                            "params": {
+                                "target": "local",
+                                "shipping.country_code": "KR",
+                                "shipping.recipient_name": "{{_local.orderer?.name || _global.currentUser?.name || '디지털구매자'}}",
+                                "shipping.recipient_phone": "{{_local.orderer?.phone || _global.currentUser?.phone || '01000000000'}}",
+                                "shipping.zipcode": "00000",
+                                "shipping.address": "디지털 상품 (배송 없음)",
+                                "shipping.address_detail": "-",
+                                "shipping.region": "",
+                                "saveShippingAddress": false
+                            },
+                            "comment": "디지털 전용: 결제 검증용 더미 배송지 (이미 zipcode 있으면 덮지 않음)"
+                        }
+                    }
+                ]
+            }
         }
     ],
     "slots": {
@@ -227,12 +305,17 @@
                             {
                                 "type": "basic",
                                 "name": "Div",
-                                "props": { "className": "flex items-start gap-3" },
+                                "props": {
+                                    "className": "flex items-start gap-3"
+                                },
                                 "children": [
                                     {
                                         "type": "basic",
                                         "name": "Icon",
-                                        "props": { "name": "exclamation-circle", "className": "text-xl text-red-500 flex-shrink-0 mt-0.5" }
+                                        "props": {
+                                            "name": "exclamation-circle",
+                                            "className": "text-xl text-red-500 flex-shrink-0 mt-0.5"
+                                        }
                                     },
                                     {
                                         "type": "basic",
@@ -241,14 +324,18 @@
                                             {
                                                 "type": "basic",
                                                 "name": "P",
-                                                "props": { "className": "text-sm font-medium text-red-800 dark:text-red-200" },
+                                                "props": {
+                                                    "className": "text-sm font-medium text-red-800 dark:text-red-200"
+                                                },
                                                 "text": "{{_local.orderError === 'confirm_failed' ? '$t:shop.checkout.payment_confirm_failed' : _local.orderError === 'amount_mismatch' ? '$t:shop.checkout.payment_amount_mismatch' : _local.orderError === 'order_not_found' ? '$t:shop.checkout.payment_order_not_found' : '$t:shop.checkout.payment_generic_error'}}"
                                             },
                                             {
                                                 "type": "basic",
                                                 "name": "P",
                                                 "if": "{{_local.orderErrorMessage}}",
-                                                "props": { "className": "text-xs text-red-600 dark:text-red-400 mt-1" },
+                                                "props": {
+                                                    "className": "text-xs text-red-600 dark:text-red-400 mt-1"
+                                                },
                                                 "text": "{{_local.orderErrorMessage}}"
                                             }
                                         ]
@@ -372,7 +459,19 @@
                                         "partial": "partials/shop/_checkout_orderer.json"
                                     },
                                     {
-                                        "partial": "partials/shop/_checkout_shipping.json"
+                                        "partial": "partials/shop/_checkout_shipping.json",
+                                        "if": "{{!_computed.isDigitalOnlyCheckout}}",
+                                        "comment": "실물/혼합만 배송지 표시. 디지털 전용은 아래 안내 + 오토필."
+                                    },
+                                    {
+                                        "comment": "디지털 전용 주문 안내",
+                                        "type": "basic",
+                                        "name": "Div",
+                                        "if": "{{_computed.isDigitalOnlyCheckout}}",
+                                        "props": {
+                                            "className": "mb-6 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-sm text-blue-800 dark:text-blue-200"
+                                        },
+                                        "text": "디지털 상품만 있어 배송지가 필요 없습니다."
                                     },
                                     {
                                         "partial": "partials/shop/_checkout_payment.json"
@@ -404,12 +503,24 @@
         ]
     },
     "modals": [
-        { "partial": "partials/shop/_modal_temp_order_not_found.json" },
-        { "partial": "partials/shop/_modal_exclusive_coupon_confirm.json" },
-        { "partial": "partials/shop/_modal_address_manage.json" },
-        { "partial": "partials/mypage/addresses/_modal_confirm_overwrite.json" },
-        { "partial": "partials/shop/_modal_cart_unavailable.json" },
-        { "partial": "partials/shop/_modal_coupon_download.json" }
+        {
+            "partial": "partials/shop/_modal_temp_order_not_found.json"
+        },
+        {
+            "partial": "partials/shop/_modal_exclusive_coupon_confirm.json"
+        },
+        {
+            "partial": "partials/shop/_modal_address_manage.json"
+        },
+        {
+            "partial": "partials/mypage/addresses/_modal_confirm_overwrite.json"
+        },
+        {
+            "partial": "partials/shop/_modal_cart_unavailable.json"
+        },
+        {
+            "partial": "partials/shop/_modal_coupon_download.json"
+        }
     ],
     "actions": [
         {
