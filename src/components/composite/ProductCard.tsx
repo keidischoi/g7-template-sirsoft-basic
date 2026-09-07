@@ -248,54 +248,50 @@ const ProductCard: React.FC<ProductCardProps> = ({
       className={`block w-full text-left group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${className}`}
       id={id} {...editorAttrs}
     >
-      {/* 이미지 영역: 원본 대비 가로 60%, 비율 1:1 */}
-      <Div className="flex w-full justify-center">
-        <Div
-          className="relative overflow-hidden bg-gray-100 dark:bg-gray-700"
-          style={{ width: '60%', aspectRatio: '1 / 1' }}
-        >
-          <Img
-            src={product.thumbnail_url}
-            alt={displayName}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-            loading="lazy"
-          />
+      {/* 이미지 영역 */}
+      <Div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
+        {/* 상품 이미지 */}
+        <Img
+          src={product.thumbnail_url}
+          alt={displayName}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+          loading="lazy"
+        />
 
-          {/* 판매 상태 오버레이 */}
-          {isNotOnSale && (
-            <Div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <Span className={`text-lg font-bold ${
-                product.sales_status === 'sold_out' ? 'text-red-300' :
-                product.sales_status === 'suspended' ? 'text-amber-300' :
-                'text-blue-300'
-              }`} style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
-                {product.sales_status_label ?? product.sales_status}
-              </Span>
-            </Div>
-          )}
-
-          {/* 할인율 뱃지 (좌상단) - 품절/판매중단 시 숨김 */}
-          {hasDiscount && product.sales_status !== 'sold_out' && product.sales_status !== 'suspended' && (
-            <Span className="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">
-              {product.discount_rate}%
+        {/* 판매 상태 오버레이 */}
+        {isNotOnSale && (
+          <Div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <Span className={`text-lg font-bold ${
+              product.sales_status === 'sold_out' ? 'text-red-300' :
+              product.sales_status === 'suspended' ? 'text-amber-300' :
+              'text-blue-300'
+            }`} style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+              {product.sales_status_label ?? product.sales_status}
             </Span>
-          )}
+          </Div>
+        )}
 
-          {/* 상품 라벨/뱃지 (우하단) */}
-          {labels.length > 0 && (
-            <Div className="absolute bottom-2 right-2 flex gap-1 flex-wrap justify-end">
-              {labels.map((label, idx) => (
-                <Span
-                  key={idx}
-                  className="text-xs text-white font-medium px-1.5 py-0.5 rounded"
-                  style={{ backgroundColor: label.color || '#6b7280' }}
-                >
-                  {label.name}
-                </Span>
-              ))}
-            </Div>
-          )}
-        </Div>
+        {/* 할인율 뱃지 (좌상단) - 품절/판매중단 시 숨김 */}
+        {hasDiscount && product.sales_status !== 'sold_out' && product.sales_status !== 'suspended' && (
+          <Span className="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">
+            {product.discount_rate}%
+          </Span>
+        )}
+
+        {/* 상품 라벨/뱃지 (우하단) */}
+        {labels.length > 0 && (
+          <Div className="absolute bottom-2 right-2 flex gap-1 flex-wrap justify-end">
+            {labels.map((label, idx) => (
+              <Span
+                key={idx}
+                className="text-xs text-white font-medium px-1.5 py-0.5 rounded"
+                style={{ backgroundColor: label.color || '#6b7280' }}
+              >
+                {label.name}
+              </Span>
+            ))}
+          </Div>
+        )}
       </Div>
 
       {/* 상품 정보 */}
