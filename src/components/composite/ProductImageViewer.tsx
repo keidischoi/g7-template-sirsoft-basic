@@ -104,17 +104,17 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
   return (
     <Div id={id} className={className} {...editorAttrs}>
       {/* 메인 이미지 */}
-      <Div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 aspect-square mb-3 flex items-center justify-center">
+      <Div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 aspect-square mb-3">
         <Button
           type="button"
-          className="max-w-[60%] max-h-[60%] w-auto h-auto cursor-zoom-in flex items-center justify-center p-0 bg-transparent border-0"
+          className="w-full h-full cursor-zoom-in block"
           onClick={() => openGallery(galleryImages, selectedIndex)}
           aria-label={t('shop.view_image')}
         >
           <Img
             src={getImageSrc(currentImage)}
             alt={currentImage.alt_text_current ?? ''}
-            className="max-w-full max-h-full w-auto h-auto object-contain"
+            className="w-full h-full object-contain"
           />
         </Button>
       </Div>
@@ -126,7 +126,7 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
             <Button
               key={img.id}
               type="button"
-              className={`flex-shrink-0 w-10 h-10 rounded-md overflow-hidden border-2 transition-colors cursor-pointer ${
+              className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-colors cursor-pointer ${
                 index === selectedIndex
                   ? 'border-gray-900 dark:border-white'
                   : 'border-gray-200 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-400'
@@ -137,7 +137,7 @@ export const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
               <Img
                 src={getImageSrc(img)}
                 alt={img.alt_text_current ?? ''}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             </Button>
           ))}
