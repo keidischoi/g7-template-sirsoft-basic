@@ -1538,6 +1538,30 @@
             "description": "사용자 정의 클래스"
           }
         }
+      },
+      {
+        "name": "AdHeroCarousel",
+        "type": "composite",
+        "description": "Bunjang-style home.top 광고 히어로 캐러셀 (자동재생·화살표·도트, desktop/mobile 이미지)",
+        "path": "src/components/composite/AdHeroCarousel.tsx",
+        "props": {
+          "items": {
+            "type": "array",
+            "required": false,
+            "description": "광고 아이템 배열 (image_url / image_url_desktop / image_url_mobile / bg_color / link_url)"
+          },
+          "intervalMs": {
+            "type": "number",
+            "required": false,
+            "default": 4000,
+            "description": "자동재생 간격(ms)"
+          },
+          "className": {
+            "type": "string",
+            "required": false,
+            "description": "사용자 정의 클래스"
+          }
+        }
       }
     ],
     "layout": [

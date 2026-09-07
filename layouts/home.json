@@ -182,20 +182,16 @@
         },
         "children": [
           {
-            "comment": "=== Ad slot: home.top (첫 행 이전) ===",
+            "comment": "=== Ad slot: home.top (첫 행 이전) — 히어로 캐러셀 ===",
             "type": "basic",
             "name": "Div",
             "if": "{{!!_global.modules?.['custom-ad_slots'] && ((ad_home_top.data ?? ad_home_top ?? []).length > 0)}}",
             "props": {
-              "className": "mb-4 flex flex-col gap-3"
-            },
-            "iteration": {
-              "source": "{{ad_home_top.data ?? ad_home_top ?? []}}",
-              "item_var": "ad"
+              "className": "mb-4"
             },
             "children": [
               {
-                "partial": "partials/ads/_banner_list.json"
+                "partial": "partials/ads/_hero_carousel.json"
               }
             ]
           },

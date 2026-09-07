@@ -4,6 +4,12 @@
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따르며,
 [Semantic Versioning](https://semver.org/lang/ko/)을 준수합니다.
 
+## [1.1.42] - 2026-09-08
+
+### Added
+
+- 홈 `home.top` 광고 슬롯에 Bunjang 스타일 히어로 캐러셀(`AdHeroCarousel`)을 추가했습니다. 자동재생·호버 일시정지·화살표·도트 인디케이터를 지원하며, desktop/mobile 이미지 필드와 레거시 `image_url`을 함께 처리합니다.
+
 ## [1.1.3] - 2026-09-06
 
 ### Added

@@ -37,6 +37,8 @@ export { UserInfo } from './UserInfo';
 export { Modal } from './Modal';
 export { TabNavigation } from './TabNavigation';
 export { SlotContainer } from './SlotContainer';
+export { AdHeroCarousel } from './AdHeroCarousel';
+export type { AdHeroCarouselProps, AdHeroItem } from './AdHeroCarousel';
 /**
  * 컴포넌트 등록 맵
  *
@@ -83,6 +85,7 @@ export declare const compositeComponents: {
     UserInfo: () => Promise<typeof import("./UserInfo")>;
     Modal: () => Promise<typeof import("./Modal")>;
     TabNavigation: () => Promise<typeof import("./TabNavigation")>;
+    AdHeroCarousel: () => Promise<typeof import("./AdHeroCarousel")>;
 };
 /**
  * 컴포넌트 타입 정의 (TypeScript 자동완성용)

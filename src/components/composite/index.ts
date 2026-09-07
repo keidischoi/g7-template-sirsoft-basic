@@ -48,6 +48,8 @@ export { UserInfo } from './UserInfo';
 export { Modal } from './Modal';
 export { TabNavigation } from './TabNavigation';
 export { SlotContainer } from './SlotContainer';
+export { AdHeroCarousel } from './AdHeroCarousel';
+export type { AdHeroCarouselProps, AdHeroItem } from './AdHeroCarousel';
 // AddressSearch는 별도 컴포넌트가 아닌 sirsoft-daum_postcode 플러그인의 extension_point 방식 사용
 
 /**
@@ -109,6 +111,7 @@ export const compositeComponents = {
   UserInfo: () => import('./UserInfo'),
   Modal: () => import('./Modal'),
   TabNavigation: () => import('./TabNavigation'),
+  AdHeroCarousel: () => import('./AdHeroCarousel'),
   // AddressSearch는 sirsoft-daum_postcode 플러그인의 extension_point 방식 사용
 };
 
