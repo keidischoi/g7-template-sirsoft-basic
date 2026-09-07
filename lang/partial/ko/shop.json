@@ -248,7 +248,8 @@
     "filter_rating_3": "⭐⭐⭐ 3점",
     "filter_rating_2": "⭐⭐ 2점",
     "filter_rating_1": "⭐ 1점",
-    "filter_reset": "필터 초기화"
+    "filter_reset": "필터 초기화",
+    "add_to_cart_failed": "장바구니에 상품을 담지 못했습니다. 옵션·배송국가·재고를 확인하거나 새로고침 후 다시 시도해 주세요."
   },
   "cart": {
     "title": "장바구니",

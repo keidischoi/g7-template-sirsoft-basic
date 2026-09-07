@@ -592,6 +592,7 @@
                         "handler": "sequence",
                         "actions": [
                           { "handler": "setState", "params": { "target": "local", "isAddingToCart": true } },
+                          { "comment": "담기 직전 cartKey 보장 (미발급/유실 시 API 실패 방지)", "handler": "initCartKey" },
                           {
                             "handler": "apiCall",
                             "auth_mode": "optional",
@@ -608,7 +609,7 @@
                             ],
                             "onError": [
                               { "handler": "setState", "params": { "target": "local", "isAddingToCart": false } },
-                              { "handler": "toast", "params": { "type": "error", "message": "{{error.errors?.message ?? error.message}}" } }
+                              { "handler": "toast", "params": { "type": "error", "message": "{{error.errors?.message ?? error.message ?? error.error ?? '$t:shop.product.add_to_cart_failed'}}" } }
                             ]
                           }
                         ]

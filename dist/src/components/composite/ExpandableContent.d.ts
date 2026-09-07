@@ -2,10 +2,20 @@ import { default as React } from 'react';
 import { EditorAttrs } from '../../types';
 export interface ExpandableContentProps {
     /**
-     * 접힌 상태의 최대 높이 (px)
+     * 접힌 상태의 최대 높이 (px). useViewportHeight 가 true 이면 뷰포트 기준이 우선한다.
      * @default 500
      */
     maxHeight?: number;
+    /**
+     * true 이면 접힌 높이를 대략 한 화면(뷰포트)으로 잡는다.
+     * @default false
+     */
+    useViewportHeight?: boolean;
+    /**
+     * 뷰포트 대비 비율 (useViewportHeight 일 때). 헤더·탭 여유를 두고 0.85 기본.
+     * @default 0.85
+     */
+    viewportRatio?: number;
     /**
      * 펼치기 버튼 텍스트
      */
@@ -23,12 +33,12 @@ export interface ExpandableContentProps {
      */
     children?: React.ReactNode;
     /**
-   * DOM id 속성 (레이아웃 편집기 코어 일괄 ID)
-   */
+     * DOM id 속성 (레이아웃 편집기 코어 일괄 ID)
+     */
     id?: string;
     /**
-       * 레이아웃 편집기 주입 속성 (편집 모드 전용, 루트에 spread)
-       */
+     * 레이아웃 편집기 주입 속성 (편집 모드 전용, 루트에 spread)
+     */
     editorAttrs?: EditorAttrs;
 }
 /**

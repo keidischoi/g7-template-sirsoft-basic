@@ -204,7 +204,7 @@ const CloseGlyph: React.FC<{ size?: number; className?: string }> = ({
 
 /** 헤더 메뉴용 인라인 SVG 아이콘 (FA 폰트 의존 없음) */
 const MenuGlyph: React.FC<{
-  name: 'settings' | 'user' | 'orders' | 'heart' | 'logout' | 'chevron-down';
+  name: 'settings' | 'user' | 'orders' | 'heart' | 'logout' | 'chevron-down' | 'cart';
   size?: number;
   className?: string;
 }> = ({ name, size = 16, className = '' }) => {
@@ -257,6 +257,14 @@ const MenuGlyph: React.FC<{
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
           <polyline points="16 17 21 12 16 7" />
           <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      );
+    case 'cart':
+      return (
+        <svg {...common}>
+          <circle cx="9" cy="20" r="1" />
+          <circle cx="17" cy="20" r="1" />
+          <path d="M3 3h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 7H6" />
         </svg>
       );
     case 'chevron-down':
@@ -497,8 +505,8 @@ const Header: React.FC<HeaderProps> = ({
             )}
 
             {/* 장바구니 */}
-            <Button onClick={() => navigate(`${shopBase}/cart`)} className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
-              <Icon name="shopping-cart" className="w-5 h-5" />
+            <Button onClick={() => navigate(`${shopBase}/cart`)} className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer" aria-label={t('nav.cart')}>
+              <MenuGlyph name="cart" size={20} className="block" />
               {cartCount > 0 && (
                 <Span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs bg-blue-500 text-white rounded-full">
                   {cartCount > 99 ? '99+' : cartCount}

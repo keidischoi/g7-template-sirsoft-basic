@@ -9,6 +9,8 @@ interface Board {
 interface User {
     uuid: string;
     name: string;
+    /** 닉네임 — 있으면 헤더 표시명/아바타 이니셜에 우선 사용 */
+    nickname?: string | null;
     avatar?: string;
     is_admin?: boolean;
 }
@@ -72,26 +74,5 @@ interface HeaderProps {
     /** "안 읽은 알림만" 체크박스 토글 */
     onNotificationUnreadOnlyToggle?: (checked: boolean) => void;
 }
-/**
- * 사이트 헤더 컴포넌트
- *
- * @example
- * ```json
- * // 레이아웃 JSON에서 사용
- * {
- *   "type": "composite",
- *   "name": "Header",
- *   "props": {
- *     "logo": "{{_global.settings.site_logo}}",
- *     "siteName": "{{_global.settings.site_name}}",
- *     "user": "{{_global.currentUser}}",
- *     "cartCount": "{{_global.cartCount}}",
- *     "notificationCount": "{{_global.notificationCount}}",
- *     "boards": "{{boards.data}}",
- *     "maxVisibleBoards": 5
- *   }
- * }
- * ```
- */
 declare const Header: React.FC<HeaderProps>;
 export default Header;
