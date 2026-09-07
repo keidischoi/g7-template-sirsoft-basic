@@ -317,6 +317,7 @@ const Header: React.FC<HeaderProps> = ({
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [activeNavColor, setActiveNavColor] = useState('');
   const userMenuRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLDivElement>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
@@ -373,7 +374,7 @@ const Header: React.FC<HeaderProps> = ({
     );
   };
 
-  // 경로별 활성 색 (같은 경로는 고정, 페이지마다 다른 팔레트 색)
+  // 클릭/이동할 때마다 활성 메뉴 색 랜덤
   const NAV_ACTIVE_PALETTE = [
     'bg-blue-600 text-white dark:bg-blue-500 dark:text-white',
     'bg-orange-500 text-white dark:bg-orange-400 dark:text-gray-900',
@@ -385,19 +386,24 @@ const Header: React.FC<HeaderProps> = ({
     'bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white',
   ] as const;
 
-  const activeColorForPath = (path: string): string => {
-    let hash = 0;
-    for (let i = 0; i < path.length; i += 1) {
-      hash = (hash * 31 + path.charCodeAt(i)) >>> 0;
-    }
-    return NAV_ACTIVE_PALETTE[hash % NAV_ACTIVE_PALETTE.length];
+  const pickRandomNavColor = (exclude?: string): string => {
+    const pool = exclude
+      ? NAV_ACTIVE_PALETTE.filter((c) => c !== exclude)
+      : [...NAV_ACTIVE_PALETTE];
+    const list = pool.length > 0 ? pool : [...NAV_ACTIVE_PALETTE];
+    return list[Math.floor(Math.random() * list.length)];
   };
+
+  useEffect(() => {
+    setActiveNavColor((prev) => pickRandomNavColor(prev));
+  }, [currentPath]);
 
   // 네비게이션 버튼 스타일
   const getNavButtonClass = (isActive: boolean): string => {
     const baseClass = 'px-3 py-2 text-sm font-medium whitespace-nowrap cursor-pointer rounded-lg transition-colors';
     if (isActive) {
-      return `${baseClass} ${activeColorForPath(currentPath)}`;
+      const color = activeNavColor || NAV_ACTIVE_PALETTE[0];
+      return `${baseClass} ${color}`;
     }
     return `${baseClass} text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800`;
   };
