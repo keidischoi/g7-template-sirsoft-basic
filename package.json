@@ -1,6 +1,6 @@
 {
   "name": "modified-basic",
-  "version": "1.1.40",
+  "version": "1.1.41",
   "description": "Gnuboard7 Modified Basic User Template Components - Nexibase Style",
   "type": "module",
   "main": "dist/components.js",
