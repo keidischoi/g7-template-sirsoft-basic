@@ -472,7 +472,7 @@ const Header: React.FC<HeaderProps> = ({
           </Button>
 
           {/* 우측 액션 버튼들 */}
-          <Div className="flex items-center gap-2">
+          <Div className="flex items-center gap-1.5">
             {/* 다크모드 전환 */}
             <ThemeToggle
               autoText={t('common.theme.auto')}
@@ -504,17 +504,6 @@ const Header: React.FC<HeaderProps> = ({
               />
             )}
 
-            {/* 장바구니 */}
-            <Button onClick={() => navigate(`${shopBase}/cart`)} className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer" aria-label={t('nav.cart')}>
-              <MenuGlyph name="cart" size={20} className="block" />
-              {cartCount > 0 && (
-                <Span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs bg-blue-500 text-white rounded-full">
-                  {cartCount > 99 ? '99+' : cartCount}
-                </Span>
-              )}
-            </Button>
-
-
             {/* 검색 — 언어 설정 옆 돋보기. 클릭 시 헤더 아래로 검색창 슬라이드 */}
             <Button
               type="button"
@@ -537,6 +526,21 @@ const Header: React.FC<HeaderProps> = ({
               <SearchGlyph size={20} className="block" />
             </Button>
 
+            {/* 장바구니 — 검색 아이콘 오른쪽 */}
+            <Button
+              onClick={() => navigate(`${shopBase}/cart`)}
+              className="relative inline-flex items-center justify-center p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors"
+              style={{ minWidth: 40, minHeight: 40 }}
+              aria-label={t('nav.cart')}
+            >
+              <MenuGlyph name="cart" size={20} className="block" />
+              {cartCount > 0 && (
+                <Span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs bg-blue-500 text-white rounded-full">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </Span>
+              )}
+            </Button>
+
             {/* 언어 선택 — 헤더 독립 버튼(코어 기능, 비회원 포함 전체 노출). 공간 절약 위해 아이콘+로케일 코드만.
                 언어는 항상 존재(이커머스 무관) → 템플릿 헤더 내장. */}
             {availableLocales && availableLocales.length > 1 && (
@@ -546,7 +550,7 @@ const Header: React.FC<HeaderProps> = ({
                     setShowSearch(false);
                     setShowLangMenu(!showLangMenu);
                   }}
-                  className="flex items-center gap-1.5 px-2.5 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors"
+                  className="flex items-center gap-1.5 px-2 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors"
                   aria-haspopup="listbox"
                   aria-expanded={showLangMenu}
                   aria-label={t('common.language')}
