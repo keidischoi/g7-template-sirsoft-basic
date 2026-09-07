@@ -6,8 +6,9 @@
  *
  * @see 화면 구성:
  * ┌─────────────────────────────────────────────────────────────────┐
- * │ [사이트명] / 링크 그룹 …                                         │
- * │ 상호 | 대표 | 사업자번호 | 통신판매업신고 | 주소 | 전화 | 이메일   │  ← 왼쪽 정렬(번개장터형)
+ * │ [사이트명]                                                       │
+ * │ 상호 | 대표 | 사업자번호 | …   ← 사이트명 바로 아래(왼쪽 컬럼)     │
+ * │ 링크 그룹 …                                                      │
  * │ © …                                                              │
  * └─────────────────────────────────────────────────────────────────┘
  */
@@ -217,6 +218,13 @@ const Footer: React.FC<FooterProps> = ({
               <P className="mt-2 text-sm text-gray-600 dark:text-gray-400">{siteDescription}</P>
             )}
 
+            {/* 전자상거래 사업자 고지 — 사이트명(3D Store) 바로 아래, 왼쪽 정렬 */}
+            {businessParts.length > 0 && (
+              <P className="mt-3 text-xs leading-relaxed text-gray-500 dark:text-gray-400 text-left">
+                {businessParts.join('  |  ')}
+              </P>
+            )}
+
             {/* 소셜 링크 */}
             <Div className="mt-4 flex items-center gap-4">
               {Object.entries(socialLinks).map(([type, url]) =>
@@ -258,18 +266,9 @@ const Footer: React.FC<FooterProps> = ({
           ))}
         </Div>
 
-        {/* 전자상거래 사업자 고지 — 왼쪽 정렬 (번개장터형) */}
-        {businessParts.length > 0 && (
-          <Div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-left">
-            <P className="text-xs leading-relaxed text-gray-500 dark:text-gray-400 text-left">
-              {businessParts.join('  |  ')}
-            </P>
-          </Div>
-        )}
-
         {/* 저작권 */}
         <Div
-          className={`mt-8 flex justify-between items-center gap-4${businessParts.length > 0 ? '' : ' pt-8 border-t border-gray-200 dark:border-gray-800'}`}
+          className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-4"
           style={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center' }}
         >
           <P className="text-sm text-gray-500 dark:text-gray-400 text-left w-full">
