@@ -607,7 +607,7 @@ export function addSelectedItemIfCompleteHandler(
 
   const newItem: SelectedItem = {
     id: optionKey,
-    optionId: matchedOption.id,
+    optionId: Number(matchedOption.id),
     options: optionLabels,
     optionValues: convertOptionValuesToRecord(
       matchedOption.option_values,
