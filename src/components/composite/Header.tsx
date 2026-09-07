@@ -6,7 +6,9 @@
  *
  * @see 화면 구성:
  * ┌─────────────────────────────────────────────────────────────────┐
- * │ [Logo] [검색바................] [🔔] [🛒(3)] [👤 닉네임 ▼]     │
+ * │ [Logo]              [🔔] [🛒] [🌐] [🔍] [👤 닉네임 ▼]           │
+ * ├─────────────────────────────────────────────────────────────────┤
+ * │ [ 검색 입력란 (🔍 클릭 시 슬라이드 다운) .................... ]   │
  * ├─────────────────────────────────────────────────────────────────┤
  * │ [홈] [🔥인기] [🛒쇼핑] [자유게시판] [질문답변] [갤러리] [더보기▼] │
  * └─────────────────────────────────────────────────────────────────┘
@@ -182,6 +184,7 @@ const Header: React.FC<HeaderProps> = ({
   onNotificationUnreadOnlyToggle,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSearch, setShowSearch] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMoreBoards, setShowMoreBoards] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
@@ -190,6 +193,8 @@ const Header: React.FC<HeaderProps> = ({
   const userMenuRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLDivElement>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
+  const searchPanelRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // G7Core.useResponsive를 통해 반응형 상태 구독 (G7 표준 — 위지윅 overrideWidth 호환)
   const G7Core = (window as any).G7Core;
@@ -255,10 +260,30 @@ const Header: React.FC<HeaderProps> = ({
       if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
         setShowLangMenu(false);
       }
+      const target = event.target as Node;
+      const toggleEl = (event.target as HTMLElement | null)?.closest?.('[data-header-search-toggle="true"]');
+      if (
+        searchPanelRef.current &&
+        !searchPanelRef.current.contains(target) &&
+        !toggleEl
+      ) {
+        setShowSearch(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // 검색 패널 열릴 때 입력 포커스 + Escape로 닫기
+  useEffect(() => {
+    if (!showSearch) return;
+    searchInputRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowSearch(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [showSearch]);
 
   const visibleBoards = boards.slice(0, maxVisibleBoards);
   const hiddenBoards = boards.slice(maxVisibleBoards);
@@ -309,25 +334,6 @@ const Header: React.FC<HeaderProps> = ({
             )}
           </Button>
 
-          {/* 검색바 (데스크톱 전용) */}
-          {!isMobile && (
-            <Form onSubmit={handleSearch} className="flex flex-1 max-w-lg mx-8">
-              <Div className="relative w-full">
-                <Input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t('common.search_placeholder')}
-                  className="w-full px-4 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                <Icon
-                  name="search"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500"
-                />
-              </Div>
-            </Form>
-          )}
-
           {/* 우측 액션 버튼들 */}
           <Div className="flex items-center gap-2">
             {/* 다크모드 전환 */}
@@ -376,7 +382,10 @@ const Header: React.FC<HeaderProps> = ({
             {availableLocales && availableLocales.length > 1 && (
               <Div ref={langMenuRef} className="relative">
                 <Button
-                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  onClick={() => {
+                    setShowSearch(false);
+                    setShowLangMenu(!showLangMenu);
+                  }}
                   className="flex items-center gap-1.5 px-2.5 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors"
                   aria-haspopup="listbox"
                   aria-expanded={showLangMenu}
@@ -415,6 +424,25 @@ const Header: React.FC<HeaderProps> = ({
                 )}
               </Div>
             )}
+
+            {/* 검색 — 언어 설정 옆 돋보기. 클릭 시 헤더 아래로 검색창 슬라이드 */}
+            <Button
+              onClick={() => {
+                setShowLangMenu(false);
+                setShowSearch((open) => !open);
+              }}
+              className={`p-2 rounded-lg transition-colors cursor-pointer ${
+                showSearch
+                  ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
+              aria-label={t('common.search')}
+              aria-expanded={showSearch}
+              aria-controls="header-search-panel"
+              data-header-search-toggle="true"
+            >
+              <Icon name="search" className="w-5 h-5" />
+            </Button>
 
             {/* 통화 선택 — 이커머스 모듈이 'header_currency' 슬롯에 주입(layout_extensions).
                 헤더는 슬롯 이름만 알고 통화/모듈을 모름. 모듈 비활성 시 빈 슬롯 → 미렌더(인프라 자동 게이트).
@@ -534,6 +562,46 @@ const Header: React.FC<HeaderProps> = ({
           </Div>
         </Div>
       </Div>
+
+      {/* 검색 패널 — 돋보기 클릭 시 아래로 슬라이드 */}
+      <Div
+        id="header-search-panel"
+        ref={searchPanelRef}
+        className={`overflow-hidden border-gray-200 dark:border-gray-800 transition-[max-height,opacity,border-width] duration-300 ease-out ${
+          showSearch
+            ? 'max-h-24 opacity-100 border-t'
+            : 'max-h-0 opacity-0 border-t-0 pointer-events-none'
+        }`}
+        aria-hidden={!showSearch}
+      >
+        <Div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Form onSubmit={(e) => { handleSearch(e); setShowSearch(false); }} className="w-full">
+            <Div className="relative flex items-center gap-2">
+              <Icon
+                name="search"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 pointer-events-none"
+              />
+              <Input
+                ref={searchInputRef}
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t('common.search_placeholder')}
+                className="w-full px-4 py-2.5 pl-10 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <Button
+                type="button"
+                onClick={() => setShowSearch(false)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg cursor-pointer"
+                aria-label="Close search"
+              >
+                <Icon name="x" className="w-4 h-4" />
+              </Button>
+            </Div>
+          </Form>
+        </Div>
+      </Div>
+
 
       {/* 탭 네비게이션 (데스크톱 전용) */}
       {!isMobile && (
