@@ -151,6 +151,54 @@ interface HeaderProps {
  * }
  * ```
  */
+
+/** FA 폰트 없이도 보이는 돋보기 (인라인 SVG) */
+const SearchGlyph: React.FC<{ size?: number; className?: string }> = ({
+  size = 20,
+  className = '',
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle cx="11" cy="11" r="7" />
+    <line x1="16.65" y1="16.65" x2="21" y2="21" />
+  </svg>
+);
+
+const CloseGlyph: React.FC<{ size?: number; className?: string }> = ({
+  size = 16,
+  className = '',
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
 const Header: React.FC<HeaderProps> = ({
   logo,
   siteName = '그누보드7',
@@ -397,7 +445,7 @@ const Header: React.FC<HeaderProps> = ({
               aria-controls="header-search-panel"
               data-header-search-toggle="true"
             >
-              <Icon name="search" className="w-5 h-5" style={{ width: 20, height: 20 }} />
+              <SearchGlyph size={20} className="block" />
             </Button>
 
             {/* 언어 선택 — 헤더 독립 버튼(코어 기능, 비회원 포함 전체 노출). 공간 절약 위해 아이콘+로케일 코드만.
@@ -587,11 +635,9 @@ const Header: React.FC<HeaderProps> = ({
           <Div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <Form onSubmit={(e) => { handleSearch(e); setShowSearch(false); }} className="w-full">
               <Div className="relative flex items-center">
-                <Icon
-                  name="search"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 pointer-events-none"
-                  style={{ width: 16, height: 16 }}
-                />
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none">
+                  <SearchGlyph size={16} />
+                </span>
                 <Input
                   ref={searchInputRef}
                   type="text"
@@ -606,7 +652,7 @@ const Header: React.FC<HeaderProps> = ({
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg cursor-pointer"
                   aria-label={t('common.close')}
                 >
-                  <Icon name="x" className="w-4 h-4" style={{ width: 16, height: 16 }} />
+                  <CloseGlyph size={16} />
                 </Button>
               </Div>
             </Form>
