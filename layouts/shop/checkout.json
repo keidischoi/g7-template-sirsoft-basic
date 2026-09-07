@@ -89,8 +89,8 @@
         "selectedPaymentMethod": "{{_local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(m => m.is_active)?.id ?? 'dbank'}}",
         "_comment_core_payment": "서버 전송용 코어 결제수단 - 플러그인 결제수단(toss_* 등)은 코어 PaymentMethodEnum 이 거부하므로, 선택 결제수단의 core_payment_method(모듈이 병합 시 보존)로 번역해 전송한다. 미선언(dbank/KG 등)은 raw id 그대로. IIFE/타 computed 참조를 피하려 선택 id 해석을 인라인 반복한다.",
         "selectedCorePaymentMethod": "{{(paymentSettings.data?.order_settings?.payment_methods ?? []).find(m => m.id === (_local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'))?.core_payment_method ?? _local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'}}",
-        "isDigitalOnlyCheckout": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? []).map(Number).includes(Number(item.product_id)))}}",
-        "_comment_digital": "디지털 전용 주문 — custom-digital_product digital-product-ids 의 product_id 집합과 checkout 아이템이 전부 일치할 때만 true. 로딩 전/혼합 장바구니는 false."
+        "isDigitalOnlyCheckout": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id)))}}",
+        "_comment_digital": "디지털 전용: digitalProductIds product_ids(언랩 경로 두 가지)와 item.product_id/product.id Number 비교. Array.map 회피. partial if 미지원 대비 배송지는 Div wrapper if 사용."
     },
     "data_sources": [
         {
@@ -149,7 +149,7 @@
                         }
                     },
                     {
-                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? []).map(Number).includes(Number(item.product_id))) && !_local.shipping?.zipcode}}",
+                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id))) && !_local.shipping?.zipcode}}",
                         "then": {
                             "handler": "setState",
                             "params": {
@@ -248,7 +248,7 @@
                 "handler": "conditions",
                 "conditions": [
                     {
-                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? []).map(Number).includes(Number(item.product_id))) && !_local.shipping?.zipcode}}",
+                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id))) && !_local.shipping?.zipcode}}",
                         "then": {
                             "handler": "setState",
                             "params": {
@@ -459,9 +459,18 @@
                                         "partial": "partials/shop/_checkout_orderer.json"
                                     },
                                     {
-                                        "partial": "partials/shop/_checkout_shipping.json",
+                                        "comment": "실물/혼합만 배송지 표시 (partial 자체 if 미지원 대비 Div wrapper)",
+                                        "type": "basic",
+                                        "name": "Div",
                                         "if": "{{!_computed.isDigitalOnlyCheckout}}",
-                                        "comment": "실물/혼합만 배송지 표시. 디지털 전용은 아래 안내 + 오토필."
+                                        "props": {
+                                            "className": ""
+                                        },
+                                        "children": [
+                                            {
+                                                "partial": "partials/shop/_checkout_shipping.json"
+                                            }
+                                        ]
                                     },
                                     {
                                         "comment": "디지털 전용 주문 안내",
