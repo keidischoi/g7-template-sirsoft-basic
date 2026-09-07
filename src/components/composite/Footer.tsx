@@ -6,12 +6,9 @@
  *
  * @see 화면 구성:
  * ┌─────────────────────────────────────────────────────────────────┐
- * │ [사이트명]                                                       │
- * │ 함께 성장하는 커뮤니티                                            │
- * ├────────────┬────────────┬────────────┬────────────────────────────┤
- * │ 커뮤니티    │ 정보       │ 정책       │ [GitHub] [Twitter] [Discord]│
- * ├─────────────────────────────────────────────────────────────────┤
- * │ © 2026 사이트명. All rights reserved.        Made with ❤️        │
+ * │ [사이트명] / 링크 그룹 …                                         │
+ * │ 상호 | 대표 | 사업자번호 | 통신판매업신고 | 주소 | 전화 | 이메일   │  ← 왼쪽 정렬(번개장터형)
+ * │ © …                                                              │
  * └─────────────────────────────────────────────────────────────────┘
  */
 
@@ -66,6 +63,23 @@ interface FooterLinkGroup {
   links: FooterLink[];
 }
 
+interface BusinessInfo {
+  /** 상호 */
+  companyName?: string;
+  /** 대표자 이름 */
+  representative?: string;
+  /** 사업자등록번호 */
+  businessNumber?: string;
+  /** 통신판매업신고 번호 */
+  mailOrderNumber?: string;
+  /** 사업장 주소 */
+  address?: string;
+  /** 대표 전화 */
+  phone?: string;
+  /** 대표 이메일 */
+  email?: string;
+}
+
 interface FooterProps {
   /** 사이트 이름 */
   siteName?: string;
@@ -77,6 +91,11 @@ interface FooterProps {
   socialLinks?: SocialLinks;
   /** 링크 그룹 (미지정 시 기본값 사용) */
   linkGroups?: FooterLinkGroup[];
+  /**
+   * 전자상거래 사업자 고지 (이커머스 설정).
+   * 값이 있는 항목만 왼쪽 정렬로 | 구분 표기 (번개장터형).
+   */
+  businessInfo?: BusinessInfo;
   /** 추가 CSS 클래스 */
   className?: string;
   /** 레이아웃 편집기 식별 속성(data-editor-*) — 시각적 루트에 spread */
@@ -111,6 +130,7 @@ const Footer: React.FC<FooterProps> = ({
   copyrightText,
   socialLinks = {},
   linkGroups,
+  businessInfo,
   className = '',
   editorAttrs,
 }) => {
@@ -144,7 +164,7 @@ const Footer: React.FC<FooterProps> = ({
       links: [
         { label: t('footer.about'), href: '/page/about' },
         { label: t('footer.faq'), href: '/faq' },
-        { label: t('footer.contact'), href: '/page/contact' },
+        { label: t('footer.contact'), href: '/board/inquiry/write' },
       ],
     },
     {
@@ -157,7 +177,19 @@ const Footer: React.FC<FooterProps> = ({
     },
   ];
 
+
   const groups = linkGroups || defaultLinkGroups;
+
+  /** 번개장터형: 값이 있는 사업자 고지만 왼쪽 정렬 + | 구분 */
+  const businessParts: string[] = [];
+  const bi = businessInfo ?? {};
+  if (bi.companyName) businessParts.push(String(bi.companyName));
+  if (bi.representative) businessParts.push(`대표 ${bi.representative}`);
+  if (bi.businessNumber) businessParts.push(`사업자등록번호 ${bi.businessNumber}`);
+  if (bi.mailOrderNumber) businessParts.push(`통신판매업신고 ${bi.mailOrderNumber}`);
+  if (bi.address) businessParts.push(String(bi.address));
+  if (bi.phone) businessParts.push(`전화 ${bi.phone}`);
+  if (bi.email) businessParts.push(`이메일 ${bi.email}`);
 
   // 소셜 아이콘 이름 매핑
   const socialIconMap: Record<keyof SocialLinks, string> = {
@@ -226,12 +258,21 @@ const Footer: React.FC<FooterProps> = ({
           ))}
         </Div>
 
+        {/* 전자상거래 사업자 고지 — 왼쪽 정렬 (번개장터형) */}
+        {businessParts.length > 0 && (
+          <Div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-left">
+            <P className="text-xs leading-relaxed text-gray-500 dark:text-gray-400 text-left">
+              {businessParts.join('  |  ')}
+            </P>
+          </Div>
+        )}
+
         {/* 저작권 */}
         <Div
-          className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-4"
-          style={{ flexDirection: isMobile ? 'column' : 'row' }}
+          className={`mt-8 flex justify-between items-center gap-4${businessParts.length > 0 ? '' : ' pt-8 border-t border-gray-200 dark:border-gray-800'}`}
+          style={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center' }}
         >
-          <P className="text-sm text-gray-500 dark:text-gray-400">
+          <P className="text-sm text-gray-500 dark:text-gray-400 text-left w-full">
             {copyrightText || `© ${currentYear} ${siteName}. All rights reserved.`}
           </P>
           <P className="text-sm text-gray-500 dark:text-gray-400">
