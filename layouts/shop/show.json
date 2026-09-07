@@ -5,7 +5,8 @@
   "extends": "_user_base",
   "computed": {
     "popularItems": "{{popularProducts?.data ?? []}}",
-    "optionChoices": "{{(product.data?.option_groups ?? []).map((g, gi) => (g.values_localized ?? []).map(v => { const combos = (product.data?.options ?? []).filter(o => o.option_values_localized?.[g.name_localized] === v && (product.data?.option_groups ?? []).slice(0, gi).every(ug => !_local.currentSelection?.[ug.name_localized] || o.option_values_localized?.[ug.name_localized] === _local.currentSelection[ug.name_localized])); const soldOut = combos.length > 0 && combos.every(o => o.is_sold_out || (o.stock_quantity ?? 0) <= 0 || !o.is_active); return { value: v, label: soldOut ? v + ' ' + $t('shop.product.sold_out_suffix') : v, disabled: soldOut }; }))}}"
+    "optionChoices": "{{(product.data?.option_groups ?? []).map((g, gi) => (g.values_localized ?? []).map(v => { const combos = (product.data?.options ?? []).filter(o => o.option_values_localized?.[g.name_localized] === v && (product.data?.option_groups ?? []).slice(0, gi).every(ug => !_local.currentSelection?.[ug.name_localized] || o.option_values_localized?.[ug.name_localized] === _local.currentSelection[ug.name_localized])); const soldOut = combos.length > 0 && combos.every(o => o.is_sold_out || (o.stock_quantity ?? 0) <= 0 || !o.is_active); return { value: v, label: soldOut ? v + ' ' + $t('shop.product.sold_out_suffix') : v, disabled: soldOut }; }))}}",
+    "inquiryBoardSlug": "{{_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ?? 'qna'}}"
   },
   "meta": {
     "seo": {
@@ -525,7 +526,7 @@
                   "iconName": "comment"
                 }
               ],
-              "hiddenTabIds": "{{_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ? [] : ['qna']}}",
+              "hiddenTabIds": [],
               "activeTabId": "{{_local.activeTab ?? 'info'}}",
               "variant": "underline"
             },

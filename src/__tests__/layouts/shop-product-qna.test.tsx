@@ -8,7 +8,7 @@
  * - 비밀글 처리 (is_owner 기반)
  * - 빈 목록 표시
  * - 문의 작성 버튼: 로그인 사용자만 표시 (비회원은 로그인 유도 버튼)
- * - board_slug 미설정 시 탭 비노출
+ * - board_slug 미설정 시 기본값 qna 로 탭 노출
  * - 비밀글 제외 체크박스
  * - 문의 작성 모달 검증 오류 UI (빨간 테두리 + 오류 텍스트)
  *
@@ -154,7 +154,7 @@ const makeQnaTabFixture = () => ({
       {
         type: 'basic',
         name: 'Div',
-        if: `{{(_local.activeTab ?? 'info') === 'qna' && !!_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug}}`,
+        if: `{{(_local.activeTab ?? 'info') === 'qna'}}`,
         props: { 'data-testid': 'qna-tab' },
         children: [
           {
@@ -752,7 +752,7 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
           {
             type: 'basic',
             name: 'Div',
-            if: `{{(_local.activeTab ?? 'info') === 'qna' && !!_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug}}`,
+            if: `{{(_local.activeTab ?? 'info') === 'qna'}}`,
             props: { 'data-testid': 'qna-tab' },
             children: [
               {
@@ -1010,7 +1010,7 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
       testUtils.cleanup();
     });
 
-    it('board_slug가 null이면 activeTab=qna여도 탭 내용이 표시되지 않는다', async () => {
+    it('board_slug가 null이어도 기본 qna로 탭 내용이 표시된다', async () => {
       const testUtils = createLayoutTest(makeQnaTabFixture(), {
         componentRegistry: registry,
         initialState: {
@@ -1026,14 +1026,14 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
 
       await testUtils.render();
 
-      await waitFor(() => {}, { timeout: 500 });
-
-      expect(screen.queryByTestId('qna-tab')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('qna-tab')).toBeInTheDocument();
+      });
 
       testUtils.cleanup();
     });
 
-    it('board_slug가 미설정이면 activeTab=qna여도 탭 내용이 표시되지 않는다', async () => {
+    it('board_slug가 미설정이어도 기본 qna로 탭 내용이 표시된다', async () => {
       const testUtils = createLayoutTest(makeQnaTabFixture(), {
         componentRegistry: registry,
         initialState: {
@@ -1047,9 +1047,9 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
 
       await testUtils.render();
 
-      await waitFor(() => {}, { timeout: 500 });
-
-      expect(screen.queryByTestId('qna-tab')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('qna-tab')).toBeInTheDocument();
+      });
 
       testUtils.cleanup();
     });
@@ -1195,7 +1195,7 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
           {
             type: 'basic',
             name: 'Div',
-            if: `{{(_local.activeTab ?? 'info') === 'qna' && !!_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug}}`,
+            if: `{{(_local.activeTab ?? 'info') === 'qna'}}`,
             props: { 'data-testid': 'qna-tab' },
             children: [
               {
@@ -1525,7 +1525,7 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
           {
             type: 'basic',
             name: 'Div',
-            if: `{{(_local.activeTab ?? 'info') === 'qna' && !!_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug}}`,
+            if: `{{(_local.activeTab ?? 'info') === 'qna'}}`,
             props: { 'data-testid': 'qna-tab' },
             children: [
               {
@@ -1689,7 +1689,7 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
           {
             type: 'basic',
             name: 'Div',
-            if: `{{(_local.activeTab ?? 'info') === 'qna' && !!_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug}}`,
+            if: `{{(_local.activeTab ?? 'info') === 'qna'}}`,
             props: { 'data-testid': 'qna-tab' },
             children: [
               {
@@ -1851,7 +1851,7 @@ describe('상품 상세 QnA 탭 (Issue #208 Phase 3)', () => {
           {
             type: 'basic',
             name: 'Div',
-            if: `{{(_local.activeTab ?? 'info') === 'qna' && !!_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug}}`,
+            if: `{{(_local.activeTab ?? 'info') === 'qna'}}`,
             props: { 'data-testid': 'qna-tab' },
             children: [
               {
