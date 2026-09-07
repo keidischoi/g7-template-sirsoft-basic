@@ -33,7 +33,9 @@
             "visible": false,
             "items": [],
             "hasStockIssue": false
-        }
+        },
+        "isDigitalOnlyCheckout": false,
+        "_comment_isDigitalOnlyCheckout": "디지털 전용 sticky — datasource 재fetch로 computed가 잠깐 false 되어도 UI가 다시 안 뜨게 _local에 고정"
     },
     "init_actions": [
         {
@@ -89,8 +91,8 @@
         "selectedPaymentMethod": "{{_local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(m => m.is_active)?.id ?? 'dbank'}}",
         "_comment_core_payment": "서버 전송용 코어 결제수단 - 플러그인 결제수단(toss_* 등)은 코어 PaymentMethodEnum 이 거부하므로, 선택 결제수단의 core_payment_method(모듈이 병합 시 보존)로 번역해 전송한다. 미선언(dbank/KG 등)은 raw id 그대로. IIFE/타 computed 참조를 피하려 선택 id 해석을 인라인 반복한다.",
         "selectedCorePaymentMethod": "{{(paymentSettings.data?.order_settings?.payment_methods ?? []).find(m => m.id === (_local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'))?.core_payment_method ?? _local.paymentMethod ?? (paymentSettings.data?.order_settings?.payment_methods ?? []).find(a => a.is_active)?.id ?? 'dbank'}}",
-        "isDigitalOnlyCheckout": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id)))}}",
-        "_comment_digital": "디지털 전용: digitalProductIds product_ids(언랩 경로 두 가지)와 item.product_id/product.id Number 비교. Array.map 회피. partial if 미지원 대비 배송지는 Div wrapper if 사용."
+        "isDigitalOnlyCheckout": "{{_local.isDigitalOnlyCheckout === true || ((checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id))))}}",
+        "_comment_digital": "디지털 전용: live detect 또는 _local sticky. onSuccess에서 양쪽 datasource 로드 후 sticky 갱신."
     },
     "data_sources": [
         {
@@ -149,22 +151,37 @@
                         }
                     },
                     {
-                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id))) && !_local.shipping?.zipcode}}",
-                        "then": {
-                            "handler": "setState",
-                            "params": {
-                                "target": "local",
-                                "shipping.country_code": "KR",
-                                "shipping.recipient_name": "{{_local.orderer?.name || _global.currentUser?.name || '디지털구매자'}}",
-                                "shipping.recipient_phone": "{{_local.orderer?.phone || _global.currentUser?.phone || '01000000000'}}",
-                                "shipping.zipcode": "00000",
-                                "shipping.address": "디지털 상품 (배송 없음)",
-                                "shipping.address_detail": "-",
-                                "shipping.region": "",
-                                "saveShippingAddress": false
+                        "comment": "디지털 전용 sticky 동기화",
+                        "handler": "conditions",
+                        "conditions": [
+                            {
+                                "if": "{{((checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id))))}}",
+                                "then": {
+                                    "handler": "setState",
+                                    "params": {
+                                        "target": "local",
+                                        "isDigitalOnlyCheckout": true,
+                                        "shipping.country_code": "KR",
+                                        "shipping.recipient_name": "{{_local.orderer?.name || _global.currentUser?.name || '디지털구매자'}}",
+                                        "shipping.recipient_phone": "{{_local.orderer?.phone || _global.currentUser?.phone || '01000000000'}}",
+                                        "shipping.zipcode": "{{_local.shipping?.zipcode || '00000'}}",
+                                        "shipping.address": "{{_local.shipping?.address || '디지털 상품 (배송 없음)'}}",
+                                        "shipping.address_detail": "{{_local.shipping?.address_detail || '-'}}",
+                                        "saveShippingAddress": false
+                                    }
+                                }
                             },
-                            "comment": "디지털 전용: 결제 검증용 더미 배송지 (이미 zipcode 있으면 덮지 않음)"
-                        }
+                            {
+                                "if": "{{(checkoutData.data?.items ?? []).length > 0 && (digitalProductIds.data?.product_ids != null || digitalProductIds.data?.data?.product_ids != null) && !(((checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id)))))}}",
+                                "then": {
+                                    "handler": "setState",
+                                    "params": {
+                                        "target": "local",
+                                        "isDigitalOnlyCheckout": false
+                                    }
+                                }
+                            }
+                        ]
                     }
                 ]
             },
@@ -248,22 +265,37 @@
                 "handler": "conditions",
                 "conditions": [
                     {
-                        "if": "{{(checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id))) && !_local.shipping?.zipcode}}",
-                        "then": {
-                            "handler": "setState",
-                            "params": {
-                                "target": "local",
-                                "shipping.country_code": "KR",
-                                "shipping.recipient_name": "{{_local.orderer?.name || _global.currentUser?.name || '디지털구매자'}}",
-                                "shipping.recipient_phone": "{{_local.orderer?.phone || _global.currentUser?.phone || '01000000000'}}",
-                                "shipping.zipcode": "00000",
-                                "shipping.address": "디지털 상품 (배송 없음)",
-                                "shipping.address_detail": "-",
-                                "shipping.region": "",
-                                "saveShippingAddress": false
+                        "comment": "디지털 전용 sticky 동기화",
+                        "handler": "conditions",
+                        "conditions": [
+                            {
+                                "if": "{{((checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id))))}}",
+                                "then": {
+                                    "handler": "setState",
+                                    "params": {
+                                        "target": "local",
+                                        "isDigitalOnlyCheckout": true,
+                                        "shipping.country_code": "KR",
+                                        "shipping.recipient_name": "{{_local.orderer?.name || _global.currentUser?.name || '디지털구매자'}}",
+                                        "shipping.recipient_phone": "{{_local.orderer?.phone || _global.currentUser?.phone || '01000000000'}}",
+                                        "shipping.zipcode": "{{_local.shipping?.zipcode || '00000'}}",
+                                        "shipping.address": "{{_local.shipping?.address || '디지털 상품 (배송 없음)'}}",
+                                        "shipping.address_detail": "{{_local.shipping?.address_detail || '-'}}",
+                                        "saveShippingAddress": false
+                                    }
+                                }
                             },
-                            "comment": "디지털 전용: 결제 검증용 더미 배송지 (이미 zipcode 있으면 덮지 않음)"
-                        }
+                            {
+                                "if": "{{(checkoutData.data?.items ?? []).length > 0 && (digitalProductIds.data?.product_ids != null || digitalProductIds.data?.data?.product_ids != null) && !(((checkoutData.data?.items ?? []).length > 0 && (checkoutData.data?.items ?? []).every(item => (digitalProductIds.data?.product_ids ?? digitalProductIds.data?.data?.product_ids ?? []).some(id => Number(id) === Number(item.product_id ?? item.product?.id)))))}}",
+                                "then": {
+                                    "handler": "setState",
+                                    "params": {
+                                        "target": "local",
+                                        "isDigitalOnlyCheckout": false
+                                    }
+                                }
+                            }
+                        ]
                     }
                 ]
             }
