@@ -1733,7 +1733,7 @@
                   "type": "basic",
                   "name": "Div",
                   "iteration": {
-                    "source": "{{boards.data ?? []}}",
+                    "source": "{{(boards.data ?? []).filter(b => !['qna', 'inquiry'].includes(b.slug))}}",
                     "item_var": "board"
                   },
                   "children": [
@@ -2013,7 +2013,7 @@
                                 {
                                   "handler": "navigate",
                                   "params": {
-                                    "path": "/board/inquiry/write"
+                                    "path": "/board/inquiry"
                                   }
                                 }
                               ]
@@ -2142,7 +2142,7 @@
             "cartCount": "{{_global.cartCount ?? 0}}",
             "notificationCount": "{{_global.notificationCount ?? 0}}",
             "shopBase": "{{_global.shopBase ?? '/shop'}}",
-            "boards": "{{boards.data ?? []}}",
+            "boards": "{{(boards.data ?? []).filter(b => !['qna', 'inquiry'].includes(b.slug))}}",
             "maxVisibleBoards": 5,
             "availableLocales": "{{$locales}}",
             "currentLocale": "{{$locale}}",
