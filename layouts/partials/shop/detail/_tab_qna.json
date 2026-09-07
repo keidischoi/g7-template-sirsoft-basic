@@ -5,7 +5,7 @@
   },
   "type": "basic",
   "name": "Div",
-  "if": "{{(_local.activeTab ?? 'info') === 'qna' && !!_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug}}",
+  "if": "{{(_local.activeTab ?? 'info') === 'qna'}}",
   "props": { "className": "py-6" },
   "children": [
     {
@@ -68,7 +68,7 @@
                 {
                   "if": "{{!!_global.currentUser?.uuid}}",
                   "then": [
-                    { "handler": "setState", "params": { "target": "global", "qnaProductId": "{{product.data.id}}", "qnaProductName": "{{product.data.name_localized ?? ''}}", "qnaProductImage": "{{product.data.thumbnail_url ?? null}}", "qnaModalBoardSettings": "{{qna.data.meta.board_settings ?? null}}", "qnaBoardSlug": "{{_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ?? ''}}", "qnaSubmitting": false, "qnaTempKey": "{{'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)}}", "qnaForm": { "title": "", "category": "", "content": "", "is_secret": true } } },
+                    { "handler": "setState", "params": { "target": "global", "qnaProductId": "{{product.data.id}}", "qnaProductName": "{{product.data.name_localized ?? ''}}", "qnaProductImage": "{{product.data.thumbnail_url ?? null}}", "qnaModalBoardSettings": "{{qna.data.meta.board_settings ?? null}}", "qnaBoardSlug": "{{_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ?? 'qna'}}", "qnaSubmitting": false, "qnaTempKey": "{{'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)}}", "qnaForm": { "title": "", "category": "", "content": "", "is_secret": true } } },
                     { "handler": "openModal", "target": "qna_write_modal" }
                   ]
                 },
@@ -365,7 +365,7 @@
                                             "qnaProductName": "{{product.data.name_localized ?? ''}}",
                                             "qnaProductImage": "{{product.data.thumbnail_url ?? null}}",
                                             "qnaModalBoardSettings": "{{qna.data.meta.board_settings ?? null}}",
-                                            "qnaBoardSlug": "{{_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ?? ''}}",
+                                            "qnaBoardSlug": "{{_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ?? 'qna'}}",
                                             "qnaCreatedAt": "{{item.created_at}}",
                                             "qnaSubmitting": false,
                                             "qnaForm": { "title": "{{item.title ?? ''}}", "category": "{{item.category ?? ''}}", "content": "{{item.content ?? ''}}", "is_secret": "{{item.is_secret ?? true}}" }
