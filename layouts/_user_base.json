@@ -2013,7 +2013,7 @@
                                 {
                                   "handler": "navigate",
                                   "params": {
-                                    "path": "/page/contact"
+                                    "path": "/board/inquiry/write"
                                   }
                                 }
                               ]
@@ -2471,7 +2471,7 @@
           ]
         },
         {
-          "comment": "=== 푸터 (Footer 컴포넌트) ===",
+          "comment": "=== 푸터 (Footer) — 사업자 고지 왼쪽 정렬(번개장터형). businessInfo는 sirsoft-ecommerce store/shop 설정 바인딩 ===",
           "id": "footer",
           "type": "composite",
           "name": "Footer",
@@ -2483,6 +2483,15 @@
               "github": "{{_global.settings?.social?.github}}",
               "twitter": "{{_global.settings?.social?.twitter}}",
               "discord": "{{_global.settings?.social?.discord}}"
+            },
+            "businessInfo": {
+              "companyName": "{{_global.modules?.['sirsoft-ecommerce']?.store?.company_name || _global.modules?.['sirsoft-ecommerce']?.shop?.company_name || _global.settings?.general?.company_name || ''}}",
+              "representative": "{{_global.modules?.['sirsoft-ecommerce']?.store?.representative_name || _global.modules?.['sirsoft-ecommerce']?.store?.ceo_name || _global.modules?.['sirsoft-ecommerce']?.shop?.representative_name || ''}}",
+              "businessNumber": "{{_global.modules?.['sirsoft-ecommerce']?.store?.business_number || _global.modules?.['sirsoft-ecommerce']?.store?.biz_no || _global.modules?.['sirsoft-ecommerce']?.shop?.business_number || ''}}",
+              "mailOrderNumber": "{{_global.modules?.['sirsoft-ecommerce']?.store?.mail_order_number || _global.modules?.['sirsoft-ecommerce']?.store?.online_marketing_number || _global.modules?.['sirsoft-ecommerce']?.shop?.mail_order_number || ''}}",
+              "address": "{{_global.modules?.['sirsoft-ecommerce']?.store?.address || _global.modules?.['sirsoft-ecommerce']?.store?.business_address || _global.modules?.['sirsoft-ecommerce']?.shop?.address || ''}}",
+              "phone": "{{_global.modules?.['sirsoft-ecommerce']?.store?.phone || _global.modules?.['sirsoft-ecommerce']?.store?.cs_phone || _global.modules?.['sirsoft-ecommerce']?.shop?.phone || _global.settings?.general?.site_phone || ''}}",
+              "email": "{{_global.modules?.['sirsoft-ecommerce']?.store?.email || _global.modules?.['sirsoft-ecommerce']?.store?.cs_email || _global.modules?.['sirsoft-ecommerce']?.shop?.email || _global.settings?.general?.site_email || ''}}"
             }
           }
         },
