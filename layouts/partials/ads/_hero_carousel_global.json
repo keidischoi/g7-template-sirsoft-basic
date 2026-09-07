@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "is_partial": true,
+    "description": "global.top Bunjang-style 히어로 캐러셀. 부모가 ad_global_top을 로드 (self-fetch 없음)."
+  },
+  "type": "composite",
+  "name": "AdHeroCarousel",
+  "props": {
+    "items": "{{ad_global_top.data ?? ad_global_top ?? []}}"
+  }
+}

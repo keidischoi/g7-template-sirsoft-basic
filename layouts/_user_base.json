@@ -2531,15 +2531,11 @@
                       "type": "basic",
                       "name": "Div",
                       "props": {
-                        "className": "mb-2 flex flex-col gap-3"
-                      },
-                      "iteration": {
-                        "source": "{{ad_global_top.data ?? ad_global_top ?? []}}",
-                        "item_var": "ad"
+                        "className": "mb-2"
                       },
                       "children": [
                         {
-                          "partial": "partials/ads/_banner_list.json"
+                          "partial": "partials/ads/_hero_carousel_global.json"
                         }
                       ]
                     }
