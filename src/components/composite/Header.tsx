@@ -63,6 +63,8 @@ interface Board {
 interface User {
   uuid: string;
   name: string;
+  /** 닉네임 — 있으면 헤더 표시명/아바타 이니셜에 우선 사용 */
+  nickname?: string | null;
   avatar?: string;
   is_admin?: boolean;
 }
@@ -368,6 +370,9 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   // 로케일 코드 → 표시명 (활성 언어팩 native_name 우선, 폴백 사전)
+  // 표시명: 닉네임 우선, 없으면 이름 (아바타 이니셜도 동일)
+  const displayName = (user?.nickname && String(user.nickname).trim()) || user?.name || '';
+
   const getLocaleName = (locale: string): string =>
     (window as any).G7Core?.state?.get?.('_global.appConfig.localeNames')?.[locale] ??
     (locale === 'ko' ? '한국어' : locale === 'en' ? 'English' : locale === 'ja' ? '日本語' : locale === 'zh' ? '中文' : locale === 'es' ? 'Español' : locale === 'fr' ? 'Français' : locale === 'de' ? 'Deutsch' : locale.toUpperCase());
@@ -520,10 +525,10 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   <Avatar
                     avatar={user.avatar}
-                    name={user.name}
+                    name={displayName}
                     size="sm"
                   />
-                  <Span className="hidden sm:inline text-sm font-medium">{user.name}</Span>
+                  <Span className="hidden sm:inline text-sm font-medium">{displayName}</Span>
                   <Icon name="chevron-down" className="w-4 h-4" />
                 </Button>
 
@@ -535,11 +540,11 @@ const Header: React.FC<HeaderProps> = ({
                       <Div className="flex items-center gap-3">
                         <Avatar
                           avatar={user.avatar}
-                          name={user.name}
+                          name={displayName}
                           size="md"
                         />
                         <Div>
-                          <Div className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</Div>
+                          <Div className="text-sm font-medium text-gray-900 dark:text-white">{displayName}</Div>
                           <Div className="text-xs text-gray-500 dark:text-gray-400">{t('common.member')}</Div>
                         </Div>
                       </Div>

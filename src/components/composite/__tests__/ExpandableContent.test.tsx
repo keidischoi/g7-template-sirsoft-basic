@@ -37,8 +37,8 @@ vi.mock('../../basic/Icon', () => ({
 (window as any).G7Core = {
   t: (key: string) => {
     const translations: Record<string, string> = {
-      'sirsoft-ecommerce.shop.product.expand_detail': '상세정보 펼쳐보기',
-      'sirsoft-ecommerce.shop.product.collapse_detail': '상세정보 접기',
+      'shop.product.expand_detail': '상품정보 더보기',
+      'shop.product.collapse_detail': '접기',
     };
     return translations[key] ?? key;
   },
@@ -76,7 +76,7 @@ describe('ExpandableContent', () => {
     );
 
     // scrollHeight가 0 (jsdom)이므로 needsExpand = false
-    expect(screen.queryByText('상세정보 펼쳐보기')).not.toBeInTheDocument();
+    expect(screen.queryByText('상품정보 더보기')).not.toBeInTheDocument();
   });
 
   it('기본 maxHeight가 500입니다', () => {
