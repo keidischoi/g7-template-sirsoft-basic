@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "is_partial": true,
+    "description": "custom-ad_slots 배너 아이템(리스트용). 부모가 data_sources를 로드하고 iteration(item_var=ad)로 이 partial을 호출한다. self-fetch 없음."
+  },
+  "type": "basic",
+  "name": "Div",
+  "props": {
+    "className": "w-full overflow-hidden rounded-lg"
+  },
+  "children": [
+    {
+      "comment": "static: 이미지 배너 (link_url 있으면 A로 감쌈)",
+      "type": "basic",
+      "name": "A",
+      "if": "{{(ad.type ?? 'static') === 'static' && ad.image_url && ad.link_url}}",
+      "props": {
+        "href": "{{ad.link_url}}",
+        "target": "_blank",
+        "rel": "noopener noreferrer",
+        "className": "block w-full",
+        "title": "{{ad.title ?? ''}}"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Img",
+          "props": {
+            "src": "{{ad.image_url}}",
+            "alt": "{{ad.title ?? 'ad'}}",
+            "className": "w-full h-auto object-cover rounded-lg"
+          }
+        }
+      ]
+    },
+    {
+      "comment": "static: 이미지만 (링크 없음)",
+      "type": "basic",
+      "name": "Img",
+      "if": "{{(ad.type ?? 'static') === 'static' && ad.image_url && !ad.link_url}}",
+      "props": {
+        "src": "{{ad.image_url}}",
+        "alt": "{{ad.title ?? 'ad'}}",
+        "className": "w-full h-auto object-cover rounded-lg"
+      }
+    },
+    {
+      "comment": "static: 이미지 없이 제목+링크",
+      "type": "basic",
+      "name": "A",
+      "if": "{{(ad.type ?? 'static') === 'static' && !ad.image_url && ad.link_url}}",
+      "props": {
+        "href": "{{ad.link_url}}",
+        "target": "_blank",
+        "rel": "noopener noreferrer",
+        "className": "block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Span",
+          "text": "{{ad.title ?? 'Ad'}}"
+        }
+      ]
+    },
+    {
+      "comment": "static: 이미지·링크 없이 제목만",
+      "type": "basic",
+      "name": "Div",
+      "if": "{{(ad.type ?? 'static') === 'static' && !ad.image_url && !ad.link_url && ad.title}}",
+      "props": {
+        "className": "w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-200"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Span",
+          "text": "{{ad.title}}"
+        }
+      ]
+    },
+    {
+      "comment": "dynamic: XSS 방지 — raw script/html 미주입. MVP는 제목만 표시",
+      "type": "basic",
+      "name": "Div",
+      "if": "{{ad.type === 'dynamic'}}",
+      "props": {
+        "className": "w-full px-4 py-3 bg-gray-100/80 dark:bg-gray-800/80 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-500 dark:text-gray-400"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Span",
+          "text": "{{ad.title ?? 'Ad'}}"
+        }
+      ]
+    }
+  ]
+}

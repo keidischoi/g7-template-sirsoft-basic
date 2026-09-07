@@ -52,6 +52,18 @@
                     "calculation": null
                 }
             }
+        },
+        {
+            "id": "ad_shop_cart_top",
+            "label_key": "Ad shop.cart.top",
+            "type": "api",
+            "endpoint": "/api/modules/custom-ad_slots/placements",
+            "method": "GET",
+            "auto_fetch": true,
+            "auth_mode": "optional",
+            "loading_strategy": "progressive",
+            "params": { "slot": "shop.cart.top" },
+            "fallback": { "data": [] }
         }
     ],
     "init_actions": [
@@ -74,6 +86,24 @@
                     "className": "py-8"
                 },
                 "children": [
+                    {
+                        "comment": "Ad slot: shop.cart.top (메인 콘텐츠 상단)",
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{(ad_shop_cart_top.data ?? ad_shop_cart_top ?? []).length > 0}}",
+                        "props": {
+                            "className": "mb-6 flex flex-col gap-3"
+                        },
+                        "iteration": {
+                            "source": "{{ad_shop_cart_top.data ?? ad_shop_cart_top ?? []}}",
+                            "item_var": "ad"
+                        },
+                        "children": [
+                            {
+                                "partial": "partials/ads/_banner_list.json"
+                            }
+                        ]
+                    },
                     {
                         "type": "basic",
                         "name": "H1",
