@@ -1733,7 +1733,7 @@
                                                                 {
                                                                     "handler": "navigate",
                                                                     "params": {
-                                                                        "path": "/page/faq"
+                                                                        "path": "/faq"
                                                                     }
                                                                 }
                                                             ]

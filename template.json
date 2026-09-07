@@ -1,146 +1,146 @@
 {
-    "identifier": "modified-basic",
-    "vendor": "modified",
-    "name": {
-        "ko": "Modified Basic",
-        "en": "Modified Basic"
+  "identifier": "modified-basic",
+  "vendor": "modified",
+  "name": {
+    "ko": "Modified Basic",
+    "en": "Modified Basic"
+  },
+  "version": "1.1.15",
+  "license": "MIT",
+  "description": {
+    "ko": "그누보드7 Modified Basic 사용자 템플릿",
+    "en": "Gnuboard7 Modified Basic user template"
+  },
+  "type": "user",
+  "locales": [
+    "ko",
+    "en"
+  ],
+  "author": {
+    "name": "sirsoft",
+    "email": "contact@sirsoft.com",
+    "url": "https://sirsoft.com"
+  },
+  "release_date": "2026-01-07",
+  "g7_version": ">=7.0.9",
+  "dependencies": {
+    "modules": {
+      "sirsoft-board": ">=1.0.0",
+      "sirsoft-ecommerce": ">=1.1.0",
+      "sirsoft-page": ">=1.1.0"
     },
-    "version": "1.1.14",
-    "license": "MIT",
-    "description": {
-        "ko": "그누보드7 Modified Basic 사용자 템플릿",
-        "en": "Gnuboard7 Modified Basic user template"
-    },
-    "type": "user",
-    "locales": [
-        "ko",
-        "en"
+    "plugins": {
+      "sirsoft-daum_postcode": ">=1.0.0"
+    }
+  },
+  "assets": {
+    "css": [
+      "dist/css/components.css"
     ],
-    "author": {
-        "name": "sirsoft",
-        "email": "contact@sirsoft.com",
-        "url": "https://sirsoft.com"
-    },
-    "release_date": "2026-01-07",
-    "g7_version": ">=7.0.9",
-    "dependencies": {
-        "modules": {
-            "sirsoft-board": ">=1.0.0",
-            "sirsoft-ecommerce": ">=1.1.0",
-            "sirsoft-page": ">=1.1.0"
-        },
-        "plugins": {
-            "sirsoft-daum_postcode": ">=1.0.0"
-        }
-    },
-    "assets": {
-        "css": [
-            "dist/css/components.css"
-        ],
-        "js": [
-            "dist/js/components.iife.js"
-        ],
-        "fonts": [],
-        "images": []
-    },
-    "components": {
-        "basic": [
-            "a",
-            "button",
-            "checkbox",
-            "div",
-            "form",
-            "h1",
-            "h2",
-            "h3",
-            "h4",
-            "hr",
-            "icon",
-            "img",
-            "input",
-            "label",
-            "li",
-            "nav",
-            "p",
-            "section",
-            "select",
-            "span",
-            "svg",
-            "table",
-            "tbody",
-            "td",
-            "textarea",
-            "th",
-            "thead",
-            "tr",
-            "ul"
-        ],
-        "composite": [
-            "header",
-            "footer",
-            "mobile-nav",
-            "product-card",
-            "rich-text-editor",
-            "image-gallery",
-            "quantity-selector",
-            "post-reactions",
-            "social-login-buttons",
-            "file-uploader",
-            "card",
-            "modal",
-            "toast",
-            "pagination",
-            "stat-card",
-            "status-badge",
-            "tab-navigation",
-            "empty-state",
-            "loading-spinner",
-            "breadcrumb",
-            "search-bar",
-            "dropdown"
-        ],
-        "layout": [
-            "container",
-            "flex",
-            "grid",
-            "section"
-        ]
-    },
-    "preview": {
-        "thumbnail": "preview/thumbnail.png",
-        "screenshots": [
-            "preview/screenshot1.png",
-            "preview/screenshot2.png"
-        ]
-    },
-    "error_config": {
-        "layouts": {
-            "401": "errors/401",
-            "403": "errors/403",
-            "404": "errors/404",
-            "500": "errors/500",
-            "503": "errors/503",
-            "maintenance": "errors/maintenance"
-        }
-    },
-    "features": {
-        "dark_mode": true,
-        "responsive": true,
-        "multi_language": true,
-        "multi_currency": true
-    },
-    "github_url": "https://github.com/keidischoi/g7-template-sirsoft-basic",
-    "github_changelog_url": "https://github.com/keidischoi/g7-template-sirsoft-basic/blob/main/CHANGELOG.md",
-    "externals": [
-        {
-            "id": "fontawesome",
-            "type": "style",
-            "asset": "vendor/font-awesome/6.4.0/css/all.inlined.css"
-        },
-        {
-            "id": "pretendard",
-            "type": "webfont",
-            "asset": "vendor/pretendard/1.3.9/pretendard-variable.css"
-        }
+    "js": [
+      "dist/js/components.iife.js"
+    ],
+    "fonts": [],
+    "images": []
+  },
+  "components": {
+    "basic": [
+      "a",
+      "button",
+      "checkbox",
+      "div",
+      "form",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "hr",
+      "icon",
+      "img",
+      "input",
+      "label",
+      "li",
+      "nav",
+      "p",
+      "section",
+      "select",
+      "span",
+      "svg",
+      "table",
+      "tbody",
+      "td",
+      "textarea",
+      "th",
+      "thead",
+      "tr",
+      "ul"
+    ],
+    "composite": [
+      "header",
+      "footer",
+      "mobile-nav",
+      "product-card",
+      "rich-text-editor",
+      "image-gallery",
+      "quantity-selector",
+      "post-reactions",
+      "social-login-buttons",
+      "file-uploader",
+      "card",
+      "modal",
+      "toast",
+      "pagination",
+      "stat-card",
+      "status-badge",
+      "tab-navigation",
+      "empty-state",
+      "loading-spinner",
+      "breadcrumb",
+      "search-bar",
+      "dropdown"
+    ],
+    "layout": [
+      "container",
+      "flex",
+      "grid",
+      "section"
     ]
+  },
+  "preview": {
+    "thumbnail": "preview/thumbnail.png",
+    "screenshots": [
+      "preview/screenshot1.png",
+      "preview/screenshot2.png"
+    ]
+  },
+  "error_config": {
+    "layouts": {
+      "401": "errors/401",
+      "403": "errors/403",
+      "404": "errors/404",
+      "500": "errors/500",
+      "503": "errors/503",
+      "maintenance": "errors/maintenance"
+    }
+  },
+  "features": {
+    "dark_mode": true,
+    "responsive": true,
+    "multi_language": true,
+    "multi_currency": true
+  },
+  "github_url": "https://github.com/keidischoi/g7-template-sirsoft-basic",
+  "github_changelog_url": "https://github.com/keidischoi/g7-template-sirsoft-basic/blob/main/CHANGELOG.md",
+  "externals": [
+    {
+      "id": "fontawesome",
+      "type": "style",
+      "asset": "vendor/font-awesome/6.4.0/css/all.inlined.css"
+    },
+    {
+      "id": "pretendard",
+      "type": "webfont",
+      "asset": "vendor/pretendard/1.3.9/pretendard-variable.css"
+    }
+  ]
 }
