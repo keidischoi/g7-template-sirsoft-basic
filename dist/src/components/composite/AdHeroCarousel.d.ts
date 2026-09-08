@@ -12,6 +12,9 @@ export interface AdHeroItem {
     image_url_mobile?: string;
     bg_color?: string;
     type?: string;
+    /** When true, block context menu on slide images */
+    prevent_right_click?: boolean;
+    preventRightClick?: boolean;
 }
 export interface AdHeroCarouselProps {
     items?: AdHeroItem[] | null;
