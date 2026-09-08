@@ -509,6 +509,12 @@
             "type": "string",
             "required": false,
             "description": "사용자 정의 클래스"
+          },
+          "preventRightClick": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "true면 이미지 우클릭(컨텍스트 메뉴) 방지"
           }
         }
       },
@@ -1548,7 +1554,7 @@
           "items": {
             "type": "array",
             "required": false,
-            "description": "광고 아이템 배열 (image_url / image_url_desktop / image_url_mobile / bg_color / link_url)"
+            "description": "광고 아이템 배열 (image_url / image_url_desktop / image_url_mobile / bg_color / link_url / prevent_right_click)"
           },
           "intervalMs": {
             "type": "number",

@@ -4,6 +4,12 @@
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따르며,
 [Semantic Versioning](https://semver.org/lang/ko/)을 준수합니다.
 
+## [1.1.50] - 2026-09-08
+
+### Added
+
+- 광고 슬롯의 `prevent_right_click` 플래그가 켜진 이미지에만 브라우저 우클릭(컨텍스트 메뉴)을 막습니다. `AdHeroCarousel`과 `_banner_list`에 적용됩니다.
+
 ## [1.1.42] - 2026-09-08
 
 ### Added

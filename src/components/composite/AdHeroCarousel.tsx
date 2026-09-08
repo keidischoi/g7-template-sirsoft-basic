@@ -17,6 +17,9 @@ export interface AdHeroItem {
   image_url_mobile?: string;
   bg_color?: string;
   type?: string;
+  /** When true, block context menu on slide images */
+  prevent_right_click?: boolean;
+  preventRightClick?: boolean;
 }
 
 export interface AdHeroCarouselProps {
@@ -141,6 +144,10 @@ export const AdHeroCarousel: React.FC<AdHeroCarouselProps> = ({
   const bg = current.bg_color || undefined;
   const alt = current.title || 'ad';
 
+  const blockContextMenu = !!(
+    current.prevent_right_click ?? current.preventRightClick
+  );
+
   const media = (
     <Div className="relative w-full h-full">
       <Img
@@ -148,12 +155,14 @@ export const AdHeroCarousel: React.FC<AdHeroCarouselProps> = ({
         alt={alt}
         className="hidden md:block absolute inset-0 w-full h-full object-cover"
         draggable={false}
+        preventRightClick={blockContextMenu}
       />
       <Img
         src={mobileSrc}
         alt={alt}
         className="block md:hidden absolute inset-0 w-full h-full object-cover"
         draggable={false}
+        preventRightClick={blockContextMenu}
       />
     </Div>
   );
