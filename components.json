@@ -1554,7 +1554,7 @@
           "items": {
             "type": "array",
             "required": false,
-            "description": "광고 아이템 배열 (image_url / image_url_desktop / image_url_mobile / bg_color / link_url / prevent_right_click)"
+            "description": "광고 아이템 배열 (image_url / image_url_desktop / image_url_mobile / bg_color / link_url / prevent_right_click / open_in_new_tab)"
           },
           "intervalMs": {
             "type": "number",

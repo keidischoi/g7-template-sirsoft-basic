@@ -54,7 +54,7 @@ export interface TabNavigationProps {
  *       {"id": 2, "label": "설정", "iconName": "cog", "badge": 3},
  *       {"id": 3, "label": "문의내역", "iconName": "comment"}
  *     ],
- *     "hiddenTabIds": "{{_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ? [] : ['inquiries']}}"
+ *     "hiddenTabIds": "{{[...(_global.modules?.['sirsoft-ecommerce']?.inquiry?.board_slug ? [] : ['inquiries']), ...(_global.modules?.['sirsoft-ecommerce']?.mileage?.enabled === false ? ['mileage'] : [])]}}"
  *   }
  * }
  */

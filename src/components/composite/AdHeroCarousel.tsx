@@ -20,6 +20,9 @@ export interface AdHeroItem {
   /** When true, block context menu on slide images */
   prevent_right_click?: boolean;
   preventRightClick?: boolean;
+  /** When true (default), external links open in a new tab */
+  open_in_new_tab?: boolean;
+  openInNewTab?: boolean;
 }
 
 export interface AdHeroCarouselProps {
@@ -85,8 +88,8 @@ const ChevronRight = () => (
  * Bunjang-style full-width ad hero carousel for `home.top`.
  *
  * Filters to static items with at least one image. Supports legacy `image_url`
- * and upcoming desktop/mobile fields. External http(s) links open in a new tab;
- * relative paths use G7Core navigate.
+ * and upcoming desktop/mobile fields. External http(s) links honor
+ * `open_in_new_tab` (default true → new tab); relative paths use G7Core navigate.
  */
 export const AdHeroCarousel: React.FC<AdHeroCarouselProps> = ({
   items,
@@ -147,6 +150,8 @@ export const AdHeroCarousel: React.FC<AdHeroCarouselProps> = ({
   const blockContextMenu = !!(
     current.prevent_right_click ?? current.preventRightClick
   );
+  const openInNewTab =
+    current.open_in_new_tab ?? current.openInNewTab ?? true;
 
   const media = (
     <Div className="relative w-full h-full">
@@ -172,12 +177,15 @@ export const AdHeroCarousel: React.FC<AdHeroCarouselProps> = ({
     if (link) navigate(link);
   };
 
+  const externalLinkProps = openInNewTab
+    ? ({ target: '_blank', rel: 'noopener noreferrer' } as const)
+    : ({} as const);
+
   const slideBody = link ? (
     isExternalUrl(link) ? (
       <A
         href={link}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...externalLinkProps}
         title={alt}
         className="absolute inset-0 block"
       >

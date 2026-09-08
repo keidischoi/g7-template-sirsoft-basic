@@ -15,6 +15,9 @@ export interface AdHeroItem {
     /** When true, block context menu on slide images */
     prevent_right_click?: boolean;
     preventRightClick?: boolean;
+    /** When true (default), external links open in a new tab */
+    open_in_new_tab?: boolean;
+    openInNewTab?: boolean;
 }
 export interface AdHeroCarouselProps {
     items?: AdHeroItem[] | null;
@@ -28,8 +31,8 @@ export interface AdHeroCarouselProps {
  * Bunjang-style full-width ad hero carousel for `home.top`.
  *
  * Filters to static items with at least one image. Supports legacy `image_url`
- * and upcoming desktop/mobile fields. External http(s) links open in a new tab;
- * relative paths use G7Core navigate.
+ * and upcoming desktop/mobile fields. External http(s) links honor
+ * `open_in_new_tab` (default true → new tab); relative paths use G7Core navigate.
  */
 export declare const AdHeroCarousel: React.FC<AdHeroCarouselProps>;
 export default AdHeroCarousel;
