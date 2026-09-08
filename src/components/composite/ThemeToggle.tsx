@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Div } from '../basic/Div';
 import { Button } from '../basic/Button';
-import { Span } from '../basic/Span';
 import type { EditorAttrs } from '../../types';
 
 /**
@@ -17,11 +16,11 @@ export interface ThemeToggleProps {
   onThemeChange?: (theme: ThemeMode) => void;
   /** 추가 CSS 클래스 */
   className?: string;
-  /** 자동 모드 텍스트 (다국어 키 사용 권장) */
+  /** 자동 모드 텍스트 (호환용, 미사용) */
   autoText?: string;
-  /** 라이트 모드 텍스트 (다국어 키 사용 권장) */
+  /** 라이트 모드 텍스트 (호환용, 미사용) */
   lightText?: string;
-  /** 다크 모드 텍스트 (다국어 키 사용 권장) */
+  /** 다크 모드 텍스트 (호환용, 미사용) */
   darkText?: string;
   /** DOM id 속성 (레이아웃 편집기 코어 일괄 ID) */
   id?: string;
@@ -32,21 +31,16 @@ export interface ThemeToggleProps {
 /**
  * ThemeToggle 컴포넌트
  *
- * 다크/라이트 모드 전환 버튼
- * - 3가지 모드: 자동(시스템 설정 따름), 라이트, 다크
+ * 다크/라이트 모드 전환 버튼 (팝업 없음)
+ * - 클릭 한 번으로 light ↔ dark 직접 토글
  * - localStorage에 'g7_color_scheme' 키로 저장 (admin 템플릿과 동일)
- * - 시스템 prefers-color-scheme 감지 지원
+ * - 저장된 값이 auto면 시스템 설정을 읽어 반대 모드로 고정
  *
  * @example
  * ```json
  * {
  *   "type": "composite",
- *   "name": "ThemeToggle",
- *   "props": {
- *     "autoText": "$t:common.theme.auto",
- *     "lightText": "$t:common.theme.light",
- *     "darkText": "$t:common.theme.dark"
- *   }
+ *   "name": "ThemeToggle"
  * }
  * ```
  */
@@ -90,10 +84,9 @@ const getInitialTheme = (): ThemeMode => {
   return 'auto';
 };
 
-
 /** FA 의존 없는 인라인 SVG (검색/장바구니/벨과 동일) */
 const SvgIcon: React.FC<{
-  kind: 'sun' | 'moon' | 'settings' | 'check';
+  kind: 'sun' | 'moon';
   className?: string;
   size?: number;
 }> = ({ kind, className = '', size = 20 }) => {
@@ -119,24 +112,9 @@ const SvgIcon: React.FC<{
       </svg>
     );
   }
-  if (kind === 'moon') {
-    return (
-      <svg {...common}>
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-      </svg>
-    );
-  }
-  if (kind === 'settings') {
-    return (
-      <svg {...common}>
-        <rect x="2" y="3" width="20" height="14" rx="2" />
-        <path d="M8 21h8M12 17v4" />
-      </svg>
-    );
-  }
   return (
     <svg {...common}>
-      <path d="M20 6L9 17l-5-5" />
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
     </svg>
   );
 };
@@ -144,17 +122,12 @@ const SvgIcon: React.FC<{
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   onThemeChange,
   className = '',
-  autoText = 'System',
-  lightText = 'Light',
-  darkText = 'Dark',
   id,
   editorAttrs,
 }) => {
   // 초기 테마를 즉시 로드하고 적용
   const initialTheme = getInitialTheme();
   const [currentMode, setCurrentMode] = useState<ThemeMode>(initialTheme);
-  const [showMenu, setShowMenu] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   /**
    * 컴포넌트 마운트 시 즉시 테마 적용
@@ -164,7 +137,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   }, []);
 
   /**
-   * 시스템 테마 변경 감지
+   * 시스템 테마 변경 감지 (auto 모드일 때만)
    */
   useEffect(() => {
     if (currentMode !== 'auto') return;
@@ -179,29 +152,15 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   }, [currentMode]);
 
   /**
-   * 외부 클릭 감지
+   * 클릭 시 light ↔ dark 직접 토글 (팝업 없음)
    */
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  /**
-   * 테마 변경 핸들러
-   * admin 템플릿과 동일한 localStorage 키 사용: 'g7_color_scheme'
-   */
-  const handleThemeChange = (mode: ThemeMode) => {
-    setCurrentMode(mode);
-    localStorage.setItem('g7_color_scheme', mode);
-    applyTheme(mode);
-    setShowMenu(false);
-    onThemeChange?.(mode);
+  const handleToggle = () => {
+    const effective = getEffectiveTheme(currentMode);
+    const next: ThemeMode = effective === 'dark' ? 'light' : 'dark';
+    setCurrentMode(next);
+    localStorage.setItem('g7_color_scheme', next);
+    applyTheme(next);
+    onThemeChange?.(next);
   };
 
   /**
@@ -213,67 +172,15 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   };
 
   return (
-    <Div ref={menuRef} className={`relative ${className}`} id={id} {...editorAttrs}>
-      {/* 테마 토글 버튼 */}
+    <Div className={`relative ${className}`} id={id} {...editorAttrs}>
       <Button
-        onClick={() => setShowMenu(!showMenu)}
+        onClick={handleToggle}
         className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-600 dark:text-gray-400"
         aria-label="Toggle theme"
+        type="button"
       >
         <SvgIcon kind={getCurrentIcon()} className="w-5 h-5" />
       </Button>
-
-      {/* 테마 선택 드롭다운 */}
-      {showMenu && (
-        <Div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-          <Div className="py-2">
-            {/* 자동 모드 */}
-            <Button
-              onClick={() => handleThemeChange('auto')}
-              className={`
-                w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors
-                ${currentMode === 'auto' ? 'bg-gray-50 dark:bg-gray-700' : ''}
-              `}
-            >
-              <SvgIcon kind="settings" className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <Span className="flex-1 text-left text-gray-900 dark:text-white">{autoText}</Span>
-              {currentMode === 'auto' && (
-                <SvgIcon kind="check" size={16} className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto" />
-              )}
-            </Button>
-
-            {/* 라이트 모드 */}
-            <Button
-              onClick={() => handleThemeChange('light')}
-              className={`
-                w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors
-                ${currentMode === 'light' ? 'bg-gray-50 dark:bg-gray-700' : ''}
-              `}
-            >
-              <SvgIcon kind="sun" className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <Span className="flex-1 text-left text-gray-900 dark:text-white">{lightText}</Span>
-              {currentMode === 'light' && (
-                <SvgIcon kind="check" size={16} className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto" />
-              )}
-            </Button>
-
-            {/* 다크 모드 */}
-            <Button
-              onClick={() => handleThemeChange('dark')}
-              className={`
-                w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors
-                ${currentMode === 'dark' ? 'bg-gray-50 dark:bg-gray-700' : ''}
-              `}
-            >
-              <SvgIcon kind="moon" className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <Span className="flex-1 text-left text-gray-900 dark:text-white">{darkText}</Span>
-              {currentMode === 'dark' && (
-                <SvgIcon kind="check" size={16} className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-auto" />
-              )}
-            </Button>
-          </Div>
-        </Div>
-      )}
     </Div>
   );
 };

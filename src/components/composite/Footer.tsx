@@ -46,6 +46,123 @@ const navigate = (path: string) => {
   });
 };
 
+type FooterIconKind =
+  | 'home'
+  | 'flame'
+  | 'layout'
+  | 'building'
+  | 'help'
+  | 'message'
+  | 'file'
+  | 'shield'
+  | 'refresh';
+
+/** 푸터 메뉴용 작은 인라인 SVG (muted currentColor) */
+const FooterIcon: React.FC<{ kind: FooterIconKind; className?: string }> = ({
+  kind,
+  className = 'w-3.5 h-3.5 shrink-0',
+}) => {
+  const common = {
+    xmlns: 'http://www.w3.org/2000/svg',
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 2,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    className,
+    'aria-hidden': true,
+    focusable: false as const,
+  };
+  switch (kind) {
+    case 'home':
+      return (
+        <svg {...common}>
+          <path d="M3 10.5 12 3l9 7.5" />
+          <path d="M5 10v10h14V10" />
+          <path d="M10 20v-6h4v6" />
+        </svg>
+      );
+    case 'flame':
+      return (
+        <svg {...common}>
+          <path d="M12 3c2 3 1 5 1 7 0 1.5-1 2.5-1 2.5S10 11.5 10 10c0-2 1-4 2-7z" />
+          <path d="M8.5 12.5C7 14 6.5 16 7.5 18A4.5 4.5 0 0 0 12 21a4.5 4.5 0 0 0 4.5-3c1-2 .5-4-1-5.5" />
+        </svg>
+      );
+    case 'layout':
+      return (
+        <svg {...common}>
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+      );
+    case 'building':
+      return (
+        <svg {...common}>
+          <path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16" />
+          <path d="M15 10h4a1 1 0 0 1 1 1v10" />
+          <path d="M8 8h2M8 12h2M8 16h2M4 21h16" />
+        </svg>
+      );
+    case 'help':
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1.5 1-1.5 2.2" />
+          <path d="M12 17h.01" />
+        </svg>
+      );
+    case 'message':
+      return (
+        <svg {...common}>
+          <path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z" />
+        </svg>
+      );
+    case 'file':
+      return (
+        <svg {...common}>
+          <path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+          <path d="M14 2v6h6" />
+          <path d="M9 13h6M9 17h6" />
+        </svg>
+      );
+    case 'shield':
+      return (
+        <svg {...common}>
+          <path d="M12 3 5 6v6c0 5 3.5 8.5 7 9 3.5-.5 7-4 7-9V6l-7-3z" />
+        </svg>
+      );
+    case 'refresh':
+      return (
+        <svg {...common}>
+          <path d="M21 12a9 9 0 1 1-2.6-6.3" />
+          <path d="M21 3v6h-6" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
+const iconForHref = (href: string): FooterIconKind | null => {
+  const pathOnly = (href || '').split('?')[0].replace(/\/$/, '') || '/';
+  const map: Record<string, FooterIconKind> = {
+    '/': 'home',
+    '/boards/popular': 'flame',
+    '/boards': 'layout',
+    '/page/about': 'building',
+    '/faq': 'help',
+    '/board/inquiry': 'message',
+    '/page/terms': 'file',
+    '/page/privacy': 'shield',
+    '/page/refund': 'refresh',
+  };
+  return map[pathOnly] ?? null;
+};
+
 interface SocialLinks {
   github?: string;
   twitter?: string;
@@ -57,6 +174,8 @@ interface SocialLinks {
 interface FooterLink {
   label: string;
   href: string;
+  /** Optional; inferred from href when omitted */
+  icon?: FooterIconKind;
 }
 
 interface FooterLinkGroup {
@@ -156,25 +275,25 @@ const Footer: React.FC<FooterProps> = ({
     {
       title: t('footer.community'),
       links: [
-        { label: t('nav.home'), href: '/' },
-        { label: t('nav.popular'), href: '/boards/popular' },
-        { label: t('footer.all_boards'), href: '/boards' },
+        { label: t('nav.home'), href: '/', icon: 'home' },
+        { label: t('nav.popular'), href: '/boards/popular', icon: 'flame' },
+        { label: t('footer.all_boards'), href: '/boards', icon: 'layout' },
       ],
     },
     {
       title: t('footer.info'),
       links: [
-        { label: t('footer.about'), href: '/page/about' },
-        { label: t('footer.faq'), href: '/faq' },
-        { label: t('footer.contact'), href: '/board/inquiry' },
+        { label: t('footer.about'), href: '/page/about', icon: 'building' },
+        { label: t('footer.faq'), href: '/faq', icon: 'help' },
+        { label: t('footer.contact'), href: '/board/inquiry', icon: 'message' },
       ],
     },
     {
       title: t('footer.policy'),
       links: [
-        { label: t('footer.terms'), href: '/page/terms' },
-        { label: t('footer.privacy'), href: '/page/privacy' },
-        { label: t('footer.refund'), href: '/page/refund' },
+        { label: t('footer.terms'), href: '/page/terms', icon: 'file' },
+        { label: t('footer.privacy'), href: '/page/privacy', icon: 'shield' },
+        { label: t('footer.refund'), href: '/page/refund', icon: 'refresh' },
       ],
     },
   ];
@@ -252,16 +371,25 @@ const Footer: React.FC<FooterProps> = ({
                 {group.title}
               </H4>
               <Ul className="mt-4 space-y-2">
-                {group.links.map((link, linkIndex) => (
-                  <Li key={linkIndex}>
-                    <Button
-                      onClick={() => navigate(link.href)}
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer"
-                    >
-                      {link.label}
-                    </Button>
-                  </Li>
-                ))}
+                {group.links.map((link, linkIndex) => {
+                  const icon = link.icon ?? iconForHref(link.href);
+                  return (
+                    <Li key={linkIndex}>
+                      <Button
+                        onClick={() => navigate(link.href)}
+                        className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer"
+                      >
+                        {icon ? (
+                          <FooterIcon
+                            kind={icon}
+                            className="w-3.5 h-3.5 shrink-0 opacity-70"
+                          />
+                        ) : null}
+                        {link.label}
+                      </Button>
+                    </Li>
+                  );
+                })}
               </Ul>
             </Div>
           ))}

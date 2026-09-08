@@ -12,11 +12,11 @@ export interface ThemeToggleProps {
     onThemeChange?: (theme: ThemeMode) => void;
     /** 추가 CSS 클래스 */
     className?: string;
-    /** 자동 모드 텍스트 (다국어 키 사용 권장) */
+    /** 자동 모드 텍스트 (호환용, 미사용) */
     autoText?: string;
-    /** 라이트 모드 텍스트 (다국어 키 사용 권장) */
+    /** 라이트 모드 텍스트 (호환용, 미사용) */
     lightText?: string;
-    /** 다크 모드 텍스트 (다국어 키 사용 권장) */
+    /** 다크 모드 텍스트 (호환용, 미사용) */
     darkText?: string;
     /** DOM id 속성 (레이아웃 편집기 코어 일괄 ID) */
     id?: string;

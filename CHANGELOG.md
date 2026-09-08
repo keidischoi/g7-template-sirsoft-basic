@@ -4,6 +4,19 @@
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따르며,
 [Semantic Versioning](https://semver.org/lang/ko/)을 준수합니다.
 
+## [1.1.51] - 2026-09-08
+
+### Added
+
+- 광고 슬롯 `open_in_new_tab`이 true(기본)이면 새 탭(`target="_blank"` + `rel="noopener noreferrer"`), false이면 같은 창에서 엽니다. `AdHeroCarousel`과 `_banner_list`에 적용됩니다.
+- 푸터 메뉴(커뮤니티·정보·정책) 각 항목 앞에 작은 인라인 SVG 아이콘을 추가했습니다(muted `currentColor`, ~14px).
+
+### Changed
+
+- 헤더 `ThemeToggle`이 팝업(라이트/다크/시스템) 없이 클릭 한 번으로 light ↔ dark를 바로 전환합니다.
+- 마이페이지 탭에서 이커머스 `mileage.enabled`가 `false`이면 마일리지 메뉴를 숨깁니다(`hiddenTabIds`, 문의 탭과 동일 패턴).
+
+
 ## [1.1.50] - 2026-09-08
 
 ### Added

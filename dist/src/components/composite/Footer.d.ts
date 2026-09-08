@@ -1,4 +1,5 @@
 import { default as React } from 'react';
+type FooterIconKind = 'home' | 'flame' | 'layout' | 'building' | 'help' | 'message' | 'file' | 'shield' | 'refresh';
 interface SocialLinks {
     github?: string;
     twitter?: string;
@@ -9,6 +10,8 @@ interface SocialLinks {
 interface FooterLink {
     label: string;
     href: string;
+    /** Optional; inferred from href when omitted */
+    icon?: FooterIconKind;
 }
 interface FooterLinkGroup {
     title: string;
